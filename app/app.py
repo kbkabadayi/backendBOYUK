@@ -20,6 +20,7 @@ app.config['MYSQL_DATABASE_DB'] = 'pompa'
 
 mysql.init_app(app)
 
+
 app.register_blueprint(pharmacist)
 app.register_blueprint(doctor)
 app.register_blueprint(bank)
