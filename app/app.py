@@ -28,7 +28,7 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 app.register_blueprint(pharmacist)
-app.register_blueprint(hospital)
+app.register_blueprint(doctor)
 app.register_blueprint(bank)
 app.register_blueprint(drug)
 app.register_blueprint(warehouse)
@@ -53,39 +53,6 @@ def get_time():
                               "programming": "sucks ass"}
     return response
 
-@app.route('/addUser', methods=['GET', 'POST'])
-def add_user():
-    data = request.json
-    return data["TCK"]
-
-@app.route('/add_drug', methods = ['GET', 'POST'])
-def add_drug():
-    data = request.json
-    drug_name = data['drug_name']
-    needs_prescription = data['needs_prescription']
-    drug_class = data['drug_class'] 
-    side_effects = data['side_effects']
-    
-    
-    return side_effects
-
-@app.route('/add_pharmacy', methods = ['GET', 'POST'])
-def add_pharmacy():
-    data = request.json
-    pharmacy_id = data['pharmacy_id']
-    pharm_name = data['pharm_name']
-    pharm_city = data['pharm_city']
-    
-    return pharmacy_id
-
-@app.route('/add_hospital', methods = ['GET', 'POST'])
-def add_hospital():
-    data = request.json
-    hospital_id = data['hospital_id']
-    name = data['name']
-    city = data['city']
-    
-    return city
 
 
 if __name__ == "__main__":
