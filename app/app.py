@@ -3,12 +3,6 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, session
 import MySQLdb.cursors
 from flask_cors import CORS
-from pharmacist import pharmacist
-from hospital import hospital
-from bank import bank
-from drug import drug
-from warehouse import warehouse
-from flask_swagger_ui import get_swaggerui_blueprint
 import datetime
 from database import db
 
