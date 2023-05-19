@@ -1,31 +1,35 @@
+import re
 import os
-from flask import Flask, render_template, request, redirect, url_for, session, json
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_mysqldb import MySQL
+import MySQLdb.cursors
 from flask_cors import CORS
-
 from pharmacist import pharmacist
 from hospital import hospital
 from bank import bank
-from drug import drugg
+from drug import drug
 from warehouse import warehouse
-
-from extensions import mysql
+from flask_swagger_ui import get_swaggerui_blueprint
+import datetime
 
 app = Flask(__name__)
 CORS(app)
 
-app.config['MYSQL_DATABASE_HOST'] = 'db'
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'password'
-app.config['MYSQL_DATABASE_DB'] = 'pompa'
-
-mysql.init_app(app)
-
-
 app.register_blueprint(pharmacist)
 app.register_blueprint(doctor)
 app.register_blueprint(bank)
-app.register_blueprint(drugg)
+app.register_blueprint(drug)
 app.register_blueprint(warehouse)
+
+app.secret_key = 'abcdefgh'
+
+app.config['MYSQL_HOST'] = 'db'
+app.config['MYSQL_USER'] = 'root'   
+app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_DB'] = 'pompa'
+
+mysql = MySQL(app)
+
 
 @app.route('/')
 @app.route('/data', methods=['GET'])
@@ -39,11 +43,11 @@ def get_time():
 
 
 
-# if __name__ == "__main__":
-#     port = int(os.environ.get('PORT', 5000))
-#     app.run(debug=True, host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
 
 
 # Running app
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
