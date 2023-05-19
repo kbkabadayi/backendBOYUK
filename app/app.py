@@ -4,10 +4,34 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from flask_cors import CORS
+from pharmacist import pharmacist
+from hospital import hospital
+from bank import bank
+from drug import drug
+from warehouse import warehouse
+from flask_swagger_ui import get_swaggerui_blueprint
 import datetime
 
 app = Flask(__name__)
 CORS(app)
+
+### swagger specific ###
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Seans-Python-Flask-REST-Boilerplate"
+    }
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+
+app.register_blueprint(pharmacist)
+app.register_blueprint(hospital)
+app.register_blueprint(bank)
+app.register_blueprint(drug)
+app.register_blueprint(warehouse)
 
 app.secret_key = 'abcdefgh'
 
@@ -33,6 +57,7 @@ def get_time():
 def add_user():
     data = request.json
     return data["TCK"]
+
 
 
 
