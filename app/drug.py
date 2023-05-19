@@ -1,21 +1,7 @@
 from flask import Blueprint, jsonify
-from extensions import mysql
 
-drug = Blueprint('drugg', __name__, url_prefix='/drug')
-con = mysql.connect()
-cursor = con.cursor()
+drug = Blueprint('drug', __name__, url_prefix='/drug')
 
-@drug.route('/add_drug', method = ['GET', 'POST'])
-def add_drug():
-    # data = request.json
-    # drug_id = data['drug_id']
-    # name = data['name']
-    # needs_prescription = data['needs_prescription']
-    # drug_class = data['drug_class']
-    # drug_type = data['drug_type']
-    
-    
-    cursor.execute('SELECT * FROM Drug')
-    user = cursor.fetchone()
-    
-    return user
+@drug.route('/endpoint4')
+def endpoint2():
+    return jsonify({'message': 'Endpoint 4'})
