@@ -12,7 +12,7 @@ CREATE TABLE User (
     TCK INT,
     password VARCHAR(40),
     fullname VARCHAR(255),
-    a_address VARCHAR(255),
+    address VARCHAR(255),
     birth_year INT,
     role VARCHAR(40),
     PRIMARY KEY (TCK)
