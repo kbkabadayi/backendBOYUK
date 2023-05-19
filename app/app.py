@@ -5,31 +5,12 @@ import MySQLdb.cursors
 from flask_cors import CORS
 import datetime
 from database import db
+from hospital import hospital
 
 #app = Flask(__name__)
 CORS(db)
 
-
-### swagger specific ###
-SWAGGER_URL = '/swagger'
-API_URL = '/static/swagger.json'
-SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
-    SWAGGER_URL,
-    API_URL,
-    config={
-        'app_name': "Seans-Python-Flask-REST-Boilerplate"
-    }
-)
-db.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
-
-db.register_blueprint(pharmacist)
 db.register_blueprint(hospital)
-db.register_blueprint(bank)
-db.register_blueprint(drug)
-db.register_blueprint(warehouse)
-
-
-
 
 @db.route('/')
 @db.route('/data', methods=['GET'])
