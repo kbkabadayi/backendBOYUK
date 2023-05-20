@@ -17,7 +17,7 @@ def add():
     role = user_data["role"]
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute("INSERT INTO User(TCK, password, fullname, address, birth_year, role) VALUES (%s, %s, %s, %s, %s, %s, %s)", (TCK,password, fullname, address, birth_year, role,))
+    cursor.execute("INSERT INTO User(TCK, password, fullname, address, birth_year, role) VALUES (%s, %s, %s, %s, %s, %s)", (TCK,password, fullname, address, birth_year, role,))
     connection.commit()
     if role == "doctor":
         expertise_field = user_data["expertise_field"]
