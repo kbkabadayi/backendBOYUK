@@ -9,7 +9,7 @@ from pharmacy import pharmacy
 from warehouse import warehouse
 from bank import bank
 from drug import drug
-
+from user import user
 #app = Flask(__name__)
 CORS(db)
 
@@ -18,6 +18,7 @@ db.register_blueprint(pharmacy)
 db.register_blueprint(bank)
 db.register_blueprint(drug)
 db.register_blueprint(warehouse)
+db.register_blueprint(user)
 
 @db.route('/')
 @db.route('/data', methods=['GET'])
