@@ -108,7 +108,6 @@ CREATE TABLE Pharmacist (
 );
 
 CREATE TABLE Drug (
-    drug_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     needs_prescription VARCHAR(255),
     drug_class VARCHAR(255),
@@ -120,17 +119,19 @@ CREATE TABLE Drug (
 CREATE TABLE Restocks (
     pharm_id INT,
     warehouse_id INT,
-    drug_id INT,
+    drug_name VARCHAR(255),
+    restock_count INT,
     restock_date DATETIME,
-    PRIMARY KEY (pharm_id, warehouse_id, drug_id),
+    PRIMARY KEY (pharm_id, warehouse_id, drug_name),
     FOREIGN KEY (pharm_id) REFERENCES Pharmacy(pharmacy_id),
     FOREIGN KEY (warehouse_id) REFERENCES PharmaceuticalWarehouse(warehouse_id),
-    FOREIGN KEY (drug_id) REFERENCES Drug(drug_id)
+    FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 
 CREATE TABLE HasDrug (
-    drug_id INT NOT NULL,
+    drug_name INT NOT NULL,
     pharmacy_id INT NOT NULL,
+    drug_count INT NOT NULL,
     PRIMARY KEY (drug_id, pharmacy_id),
     FOREIGN KEY (drug_id) REFERENCES Drug(drug_id),
     FOREIGN KEY (pharmacy_id) REFERENCES Pharmacy(pharmacy_id)
