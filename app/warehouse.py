@@ -26,5 +26,6 @@ def remove(id):
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("DELETE FROM PharmaceuticalWarehouse WHERE warehouse_id = %s", [id])
 
+    connection.commit()
     return "Warehouse removed sueccessfully"
     
