@@ -29,14 +29,14 @@ def restockDrug():
     drug_to_count = data["drug_to_count"]
     pharm_id = data["pharm_id"]
     warehouse_id = data["warehouse_id"]
-    restock_date = datetime.datetime.now()
+    restock_date = datetime.now()
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-    for drug_name, count in drug_to_count:
-        cursor.execute("UPDATE HasDrug SET drug_count = drug_count + %s WHERE drug_name = %s AND pharm_id = %s", (count, drug_name, pharm_id))
+    for drug_name, count in drug_to_count.items():
+        cursor.execute("UPDATE HasDrug SET drug_count = drug_count + %s WHERE drug_name = %s AND pharmacy_id = %s", (count, drug_name, pharm_id))
         connection.commit()
-        cursor.execute("INSERT INTO Restocks VALUES (%s, %s, %s, %s, %s)", (pharm_id, warehouse_id, drug_name, count, pharm_id, restock_date))
+        cursor.execute("INSERT INTO Restocks VALUES (%s, %s, %s, %s, %s)", (pharm_id, warehouse_id, drug_name, count, restock_date))
         connection.commit()
     
     return jsonify({"result": "Drug restocked to the pharmacy"})
@@ -52,8 +52,8 @@ def orderDrug():
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-    for drug_name, count in drug_to_count:
-        cursor.execute("UPDATE HasDrug SET drug_count = drug_count - %s WHERE drug_name = %s AND pharm_id = %s", (count, drug_name, pharm_id))
+    for drug_name, count in drug_to_count.items():
+        cursor.execute("UPDATE HasDrug SET drug_count = drug_count - %s WHERE drug_name = %s AND pharmacy_id = %s", (count, drug_name, pharm_id))
         connection.commit()
 
         status = "pompa"
@@ -62,12 +62,12 @@ def orderDrug():
 
         cursor.execute("SELECT price FROM Drug where name = %s", (drug_name,))
         price = cursor.fetchone()
-        offset = count * price 
+        offset = count * price['price']
 
         cursor.execute("UPDATE BankAccount SET balance = balance - %s WHERE bank_account_no = %s", (offset, bank_account_no))
         connection.commit()
     
-    return jsonify({"result": "Drug restocked in pharmacy"})
+    return jsonify({"result": "Drug ordered from"})
 
 
 

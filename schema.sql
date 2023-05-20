@@ -160,7 +160,7 @@ CREATE TABLE Orders (
     order_date DATETIME,
     count INT,
     status VARCHAR(40),
-    PRIMARY KEY (bank_account_no, drug_name, patient_TCK),
+    PRIMARY KEY (bank_account_no, drug_name, patient_TCK, order_date),
     FOREIGN KEY (bank_account_no) REFERENCES BankAccount(bank_account_no),
     FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK),
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
@@ -245,3 +245,6 @@ VALUES(2121212122, 'Flu');
 
 INSERT INTO Prescription(presc_id, date)
 VALUES(1, '2023-03-14 09:00:00');
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("teraflu", 1, 0);
