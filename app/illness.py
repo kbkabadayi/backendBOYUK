@@ -17,7 +17,7 @@ def add():
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute( "SELECT illness_name FROM Illness WHERE illness_name = %s", (illness_name,))
     exist = cursor.fetchone()
-    if exist != illness_name:
+    if exist is None:
         cursor.execute("INSERT INTO Illness(illness_name, type) VALUES (%s, %s)", (illness_name, type))
         connection.commit()
     cursor.execute("INSERT INTO HasIllness(patient_TCK, illness_name) VALUES (%s, %s)", (patient_TCK, illness_name))
