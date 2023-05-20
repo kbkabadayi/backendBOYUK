@@ -114,7 +114,7 @@ CREATE TABLE Drug (
     drug_class VARCHAR(255),
     drug_type VARCHAR(255),
     price INT,
-    PRIMARY KEY (drug_id)
+    PRIMARY KEY (name)
 );
 
 CREATE TABLE Restocks (
@@ -130,20 +130,20 @@ CREATE TABLE Restocks (
 );
 
 CREATE TABLE HasDrug (
-    drug_name INT NOT NULL,
+    drug_name VARCHAR(255) NOT NULL,
     pharmacy_id INT NOT NULL,
     drug_count INT NOT NULL,
-    PRIMARY KEY (drug_id, pharmacy_id),
-    FOREIGN KEY (drug_id) REFERENCES Drug(drug_id),
+    PRIMARY KEY (drug_name, pharmacy_id),
+    FOREIGN KEY (drug_name) REFERENCES Drug(name);
     FOREIGN KEY (pharmacy_id) REFERENCES Pharmacy(pharmacy_id)
 );
 
 CREATE TABLE SideEffect (
     effect_name VARCHAR(255) NOT NULL,
-    drug_id INT NOT NULL,
+    drug_name VARCHAR(255) NOT NULL,
     intensity INT,
     PRIMARY KEY (effect_name),
-    FOREIGN KEY (drug_id) REFERENCES Drug(drug_id)
+    FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 
 CREATE TABLE Dosage (
@@ -156,11 +156,11 @@ CREATE TABLE Dosage (
 CREATE TABLE Orders (
     bank_account_no INT,
     patient_TCK INT,
-    drug_name VARCHAR(40),
+    drug_name VARCHAR(255),
     order_date DATETIME,
     count INT,
     status VARCHAR(40),
-    PRIMARY KEY (bank_account_no, drug_id, patient_TCK),
+    PRIMARY KEY (bank_account_no, drug_name, patient_TCK),
     FOREIGN KEY (bank_account_no) REFERENCES BankAccount(bank_account_no),
     FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK),
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
@@ -168,10 +168,10 @@ CREATE TABLE Orders (
 
 CREATE TABLE Contains (
     presc_id INT,
-    drug_id INT,
-    PRIMARY KEY (presc_id, drug_id),
+    drug_name VARCHAR(255),
+    PRIMARY KEY (presc_id, drug_name),
     FOREIGN KEY (presc_id) REFERENCES Prescription(presc_id),
-    FOREIGN KEY (drug_id) REFERENCES Drug(drug_id)
+    FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 
 CREATE TABLE HasBankAccount (
@@ -183,16 +183,16 @@ CREATE TABLE HasBankAccount (
 );
 
 CREATE TABLE HasDosage (
-    drug_id INT NOT NULL,
+    drug_name varchar(255) NOT NULL,
     age_group VARCHAR(255) NOT NULL,
     no_per_day INT NOT NULL,
     dosage_per_use INT NOT NULL,
-    PRIMARY KEY (drug_id, age_group, no_per_day, dosage_per_use),
+    PRIMARY KEY (drug_name, age_group, no_per_day, dosage_per_use),
     FOREIGN KEY (age_group, no_per_day, dosage_per_use) REFERENCES Dosage(age_group, no_per_day, dosage_per_use),
-    FOREIGN KEY (drug_id) REFERENCES Drug(drug_id)
+    FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 
-INSERT INTO Drug(drug_id, name, needs_prescription, drug_class, drug_type, price)
+INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
 VALUES(1, "teraflu", "no", "flu drug", "drug type", 56);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
