@@ -34,10 +34,9 @@ CREATE TABLE Doctor (
 
 CREATE TABLE Patient (
     TCK INT,
-    expertise_field VARCHAR(40),
-    hospital_id INT,
+    bank_account_no INT,
     PRIMARY KEY (TCK),
-    FOREIGN KEY (hospital_id) REFERENCES Hospital(hospital_id),
+    FOREIGN KEY (bank_account_no) REFERENCES BankAccount(bank_account_no),
     FOREIGN KEY (TCK) REFERENCES User(TCK)
 );
 
