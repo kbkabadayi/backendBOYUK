@@ -1,7 +1,6 @@
 import re
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
-import MySQLdb.cursors
 from flask_cors import CORS
 import datetime
 from database import db
