@@ -6,6 +6,7 @@ import datetime
 from database import db
 from hospital import hospital
 from pharmacy import pharmacy
+from warehouse import warehouse
 from bank import bank
 from drug import drug
 
