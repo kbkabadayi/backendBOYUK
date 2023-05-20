@@ -16,6 +16,7 @@ db.register_blueprint(hospital)
 db.register_blueprint(pharmacy)
 db.register_blueprint(bank)
 db.register_blueprint(drug)
+db.register_blueprint(warehouse)
 
 @db.route('/')
 @db.route('/data', methods=['GET'])
