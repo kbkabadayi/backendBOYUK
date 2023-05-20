@@ -119,12 +119,12 @@ CREATE TABLE Drug (
 );
 
 CREATE TABLE Restocks (
-    pharmacist_TCK INT,
+    pharm_id INT,
     warehouse_id INT,
     drug_id INT,
     restock_date DATETIME,
-    PRIMARY KEY (pharmacist_TCK, warehouse_id, drug_id),
-    FOREIGN KEY (pharmacist_TCK) REFERENCES Pharmacist(TCK),
+    PRIMARY KEY (pharm_id, warehouse_id, drug_id),
+    FOREIGN KEY (pharm_id) REFERENCES Pharmacy(pharmacy_id),
     FOREIGN KEY (warehouse_id) REFERENCES PharmaceuticalWarehouse(warehouse_id),
     FOREIGN KEY (drug_id) REFERENCES Drug(drug_id)
 );

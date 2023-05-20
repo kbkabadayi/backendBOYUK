@@ -6,12 +6,16 @@ import datetime
 from database import db
 from hospital import hospital
 from pharmacy import pharmacy
+from bank import bank
+from drug import drug
 
 #app = Flask(__name__)
 CORS(db)
 
 db.register_blueprint(hospital)
 db.register_blueprint(pharmacy)
+db.register_blueprint(bank)
+db.register_blueprint(drug)
 
 @db.route('/')
 @db.route('/data', methods=['GET'])
