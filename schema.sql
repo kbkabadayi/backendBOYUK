@@ -60,7 +60,7 @@ CREATE TABLE Prescribes (
     presc_id INT,
     PRIMARY KEY (doctor_TCK, patient_TCK, presc_id),
     FOREIGN KEY (doctor_TCK) REFERENCES User(TCK),
-    FOREIGN KEY (patient_TCK) REFERENCES User(TCK),
+    FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK),
     FOREIGN KEY (presc_id) REFERENCES Prescription(presc_id)
 );
 
@@ -119,12 +119,12 @@ CREATE TABLE Drug (
 );
 
 CREATE TABLE Restocks (
-    pharm_id INT,
+    pharmacy_id INT,
     warehouse_id INT,
     drug_id INT,
     restock_date DATETIME,
-    PRIMARY KEY (pharm_id, warehouse_id, drug_id),
-    FOREIGN KEY (pharm_id) REFERENCES Pharmacy(pharmacy_id),
+    PRIMARY KEY (pharmacy_id, warehouse_id, drug_id),
+    FOREIGN KEY (pharmacy_id) REFERENCES Pharmacy(pharmacy_id),
     FOREIGN KEY (warehouse_id) REFERENCES PharmaceuticalWarehouse(warehouse_id),
     FOREIGN KEY (drug_id) REFERENCES Drug(drug_id)
 );
@@ -186,60 +186,60 @@ CREATE TABLE HasDosage (
     no_per_day INT NOT NULL,
     dosage_per_use INT NOT NULL,
     PRIMARY KEY (drug_id, age_group, no_per_day, dosage_per_use),
-    FOREIGN KEY (age_group, no_per_day, dosage_per_use) REFERENCES Dosage(age_group, no_per_day, dosage_per_use),
-    FOREIGN KEY (drug_id) REFERENCES Drug(drug_id)
+    FOREIGN KEY (drug_id) REFERENCES Drug(drug_id),
+    FOREIGN KEY (age_group, no_per_day, dosage_per_use) REFERENCES Dosage(age_group, no_per_day, dosage_per_use)
 );
 
 INSERT INTO Drug(drug_id, name, needs_prescription, drug_class, drug_type, price)
-VALUES(1, "teraflu", "no", "flu drug", "drug type", 56);
+VALUES(1, 'teraflu', 'no', 'flu drug', 'drug type', 56);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212121, "şifre", "Big Dick", "Bilkent üniversitesi çankaya/ankara", 2001, "doctor");
+VALUES(12121212121, 'şifre', 'Big Dick', 'Bilkent üniversitesi çankaya/ankara', 2001, 'doctor');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212122, "şifre", "Big Patient", "maltepe üniversitesi çankaya/ankara", 2002, "patient");
+VALUES(12121212122, 'şifre', 'Big Patient', 'maltepe üniversitesi çankaya/ankara', 2002, 'patient');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212123, "şifre", "benim adim eczaci", "eczaci adres", 1985, "pharmacist");
+VALUES(12121212123, 'şifre', 'benim adim eczaci', 'eczaci adres', 1985, 'pharmacist');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212124, "şifre", "benim isim Pharmaceutical Warehouse", "işçi adresi", 1903, "pharmaceuticalwarehouseworker");
+VALUES(12121212124, 'şifre', 'benim isim Pharmaceutical Warehouse', 'işçi adresi', 1903, 'pharmaceuticalwarehouseworker');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212125, "şifre admin", "benim isim admin", "admin adresi", 1905, "admin");
+VALUES(12121212125, 'şifre admin', 'benim isim admin', 'admin adresi', 1905, 'admin');
 
 INSERT INTO Admin(admin_id)
 VALUES(1);
 
 INSERT INTO Doctor(TCK, expertise_field, hospital_id)
-VALUES(12121212121, "üroloji", 1);
+VALUES(12121212121, 'üroloji', 1);
+
+INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance)
+VALUES(3131, 'banka şifre', 'aktif', 1000);
 
 INSERT INTO Patient(TCK, bank_account_no)
 VALUES(12121212122, 3131);
 
-INSERT INTO Pharmacist(TCK, pharm_id)
+INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
+VALUES(1, 'Faruk Eczanesi', 'pompa city');
+
+INSERT INTO Pharmacist(TCK, pharmacy_id)
 VALUES(12121212123, 1);
 
 INSERT INTO PharmaceuticalWarehouse(warehouse_id, warehouse_name, warehouse_city)
-VALUES(1, "Bizim Depo", "Ankara");
+VALUES(1, 'Bizim Depo', 'Ankara');
 
 INSERT INTO PharmaceuticalWarehouseWorker(TCK, warehouse_id)
 VALUES(12121212124, 1);
 
 INSERT INTO Hospital(hospital_id, name, city)
-VALUES(1, "Başibüyük Hastanesi", "Adana");
+VALUES(1, 'Başibüyük Hastanesi', 'Adana');
 
-INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance)
-VALUES(3131, "banka şifre", "aktif", 1000);
-
-INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
-VALUES(1, "Faruk Eczanesi", "pompa city");
-
-INSERT INTO Illness(name, type)
-VALUES("Flu", "öldürücü değil");
+INSERT INTO Illness(illness_name, type)
+VALUES('Flu', 'öldürücü değil');
 
 INSERT INTO HasIllness(patient_TCK, illness_name)
-VALUES(12121212122, "Flu");
+VALUES(12121212122, 'Flu');
 
 INSERT INTO Prescription(presc_id, date)
-VALUES(1, "2023-03-14 09:00:00");
+VALUES(1, '2023-03-14 09:00:00');
