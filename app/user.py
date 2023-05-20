@@ -17,7 +17,7 @@ def add():
     role = user_data["role"]
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute("INSERT INTO User(TCK, password, fullname, address, birth_year, role) VALUES (%s, %s, %s, %s, %s, %s, %s)", (TCK,password, fullname, address, birth_year, role,))
+    cursor.execute("INSERT INTO User(TCK, password, fullname, address, birth_year, role) VALUES (%s, %s, %s, %s, %s, %s)", (TCK,password, fullname, address, birth_year, role,))
     connection.commit()
     if role == "doctor":
         expertise_field = user_data["expertise_field"]
@@ -46,18 +46,18 @@ def delete(TCK):
     cursor.execute("SELECT role FROM User WHERE TCK = %s", (TCK, ))
     role = cursor.fetchone()
 
-    cursor.execute("DELETE FROM User WHERE h = %s", (TCK,))
+    cursor.execute("DELETE FROM User WHERE TCK = %s", (TCK,))
     connection.commit()
-    if role == "doctor":
+    if role.lower() == "doctor":
         cursor.execute("DELETE FROM Doctor WHERE TCK = %s", (TCK,))
         connection.commit()
-    elif role == "patient":
+    elif role.lower() == "patient":
         cursor.execute("DELETE FROM Patient WHERE TCK = %s", (TCK,))
         connection.commit()
-    elif role == "pharmaceuticalwarehouseworker":
+    elif role.lower() == "pharmaceuticalwarehouseworker":
         cursor.execute("DELETE FROM PharmaceuticalWarehouseWorker WHERE TCK = %s", (TCK,))
         connection.commit()
-    elif role == "pharmacist":
+    elif role.lower() == "pharmacist":
         cursor.execute("DELETE FROM Pharmacist WHERE TCK = %s", (TCK,))
         connection.commit()
 
