@@ -6,11 +6,13 @@ from flask_cors import CORS
 import datetime
 from database import db
 from hospital import hospital
+from pharmacy import pharmacy
 
 #app = Flask(__name__)
 CORS(db)
 
 db.register_blueprint(hospital)
+db.register_blueprint(pharmacy)
 
 @db.route('/')
 @db.route('/data', methods=['GET'])
