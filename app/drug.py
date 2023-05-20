@@ -7,7 +7,7 @@ from datetime import datetime
 drug = Blueprint('drug', __name__, url_prefix='/drug')
 
 @drug.route('/registerDrug', methods=['POST'])
-def add():
+def registerDrug():
     data = request.json
     drug_id = data["drug_id"]
     name = data["name"]
@@ -25,19 +25,25 @@ def add():
 
 
 @drug.route('/pharmacyAddDrug', methods=['POST'])
-def add():
+def addDrugPharmacy():
     data = request.json
-    drug_id = data["drug_id"]
+    drug_count = data["drug_count"]
     pharm_id = data["pharm_id"]
     warehouse_id = data["warehouse_id"]
     restock_date = datetime.datetime.now()
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute("INSERT INTO HasDrug VALUES (%s, %s)", (drug_id, pharm_id))
+    for drug_id in drug_count:
+        for i in range(drug_count[drug_id]):
+            cursor.execute("INSERT INTO HasDrug VALUES (%s, %s)", (drug_id, pharm_id))
 
-    cursor.execute("INSER INTO Restocks VALUES (%s, %s, %s, %s)", (pharm_id, warehouse_id, drug_id, restock_date))
+    for drug_id in drug_count:
+        for i in range(drug_count[drug_id]):
+            cursor.execute("INSERT INTO Restocks VALUES (%s, %s, %s, %s)", (pharm_id, warehouse_id, drug_id, restock_date))
     
+    
+
 
     connection.commit()
     return jsonify({"result": "Drug added to the pharmacy"})
