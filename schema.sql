@@ -156,13 +156,14 @@ CREATE TABLE Dosage (
 CREATE TABLE Orders (
     bank_account_no INT,
     patient_TCK INT,
-    drug_id INT,
+    drug_name VARCHAR(40),
     order_date DATETIME,
+    count INT,
     status VARCHAR(40),
     PRIMARY KEY (bank_account_no, drug_id, patient_TCK),
     FOREIGN KEY (bank_account_no) REFERENCES BankAccount(bank_account_no),
     FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK),
-    FOREIGN KEY (drug_id) REFERENCES Drug(drug_id)
+    FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 
 CREATE TABLE Contains (

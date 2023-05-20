@@ -45,6 +45,7 @@ def restockDrug():
 def orderDrug():
     data = request.json
     drug_to_count = data["drug_to_count"]
+    pharm_id = data["pharm_id"]
     bank_account_no = data["bank_account_no"]
     patient_TCK = data["patient_TCK"]
     order_date = datetime.now()
@@ -52,9 +53,18 @@ def orderDrug():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     for drug_name, count in drug_to_count:
-        cursor.execute("UPDATE HasDrug SET drug_count = drug_count + %s WHERE drug_name = %s AND pharm_id = %s", (count, drug_name, pharm_id))
+        cursor.execute("UPDATE HasDrug SET drug_count = drug_count - %s WHERE drug_name = %s AND pharm_id = %s", (count, drug_name, pharm_id))
         connection.commit()
-        cursor.execute("INSERT INTO Restocks VALUES (%s, %s, %s, %s, %s)", (pharm_id, warehouse_id, drug_name, count, pharm_id, restock_date))
+
+        status = "pompa"
+        cursor.execute("INSERT INTO Orders VALUES (%s, %s, %s, %s, %s, %s)", (bank_account_no, patient_TCK, drug_name, order_date, count, status))
+        connection.commit()
+
+        cursor.execute("SELECT price FROM Drug where name = %s", (drug_name,))
+        price = cursor.fetchone()
+        offset = count * price 
+
+        cursor.execute("UPDATE BankAccount SET balance = balance - %s WHERE bank_account_no = %s", (offset, bank_account_no))
         connection.commit()
     
     return jsonify({"result": "Drug restocked in pharmacy"})
