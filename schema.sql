@@ -31,12 +31,7 @@ CREATE TABLE Doctor (
     FOREIGN KEY (hospital_id) REFERENCES Hospital(hospital_id),
     FOREIGN KEY (TCK) REFERENCES User(TCK)
 );
-CREATE TABLE BankAccount (
-    bank_account_no INT,
-    bank_account_password VARCHAR(40),
-    active VARCHAR(40),
-    PRIMARY KEY (bank_account_no)
-);
+
 CREATE TABLE Patient (
     TCK INT,
     bank_account_no INT,
