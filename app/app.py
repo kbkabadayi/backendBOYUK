@@ -10,6 +10,7 @@ from warehouse import warehouse
 from bank import bank
 from drug import drug
 from user import user
+from illness import illness
 #app = Flask(__name__)
 CORS(db)
 
