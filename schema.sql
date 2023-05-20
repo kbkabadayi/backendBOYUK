@@ -32,20 +32,20 @@ CREATE TABLE Doctor (
     FOREIGN KEY (TCK) REFERENCES User(TCK)
 );
 
-CREATE TABLE Patient (
-    TCK INT,
-    bank_account_no INT,
-    PRIMARY KEY (TCK),
-    FOREIGN KEY (bank_account_no) REFERENCES BankAccount(bank_account_no),
-    FOREIGN KEY (TCK) REFERENCES User(TCK)
-);
-
 CREATE TABLE BankAccount (
     bank_account_no INT,
     bank_account_password VARCHAR(40),
     active VARCHAR(40),
     balance INT,
     PRIMARY KEY (bank_account_no)
+);
+
+CREATE TABLE Patient (
+    TCK INT,
+    bank_account_no INT,
+    PRIMARY KEY (TCK),
+    FOREIGN KEY (bank_account_no) REFERENCES BankAccount(bank_account_no),
+    FOREIGN KEY (TCK) REFERENCES User(TCK)
 );
 
 CREATE TABLE Prescription (
@@ -118,7 +118,7 @@ CREATE TABLE Drug (
 );
 
 CREATE TABLE Restocks (
-    pharmacy_id INT,
+    pharm_id INT,
     warehouse_id INT,
     drug_name VARCHAR(255),
     restock_count INT,
@@ -134,7 +134,7 @@ CREATE TABLE HasDrug (
     pharmacy_id INT NOT NULL,
     drug_count INT NOT NULL,
     PRIMARY KEY (drug_name, pharmacy_id),
-    FOREIGN KEY (drug_name) REFERENCES Drug(name);
+    FOREIGN KEY (drug_name) REFERENCES Drug(name),
     FOREIGN KEY (pharmacy_id) REFERENCES Pharmacy(pharmacy_id)
 );
 
@@ -193,55 +193,55 @@ CREATE TABLE HasDosage (
 );
 
 INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
-VALUES(1, "teraflu", "no", "flu drug", "drug type", 56);
+VALUES("teraflu", "no", "flu drug", "drug type", 56);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212121, 'şifre', 'Big Dick', 'Bilkent üniversitesi çankaya/ankara', 2001, 'doctor');
+VALUES(2121212121, 'şifre', 'Big Dick', 'Bilkent üniversitesi çankaya/ankara', 2001, 'doctor');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212122, 'şifre', 'Big Patient', 'maltepe üniversitesi çankaya/ankara', 2002, 'patient');
+VALUES(2121212122, 'şifre', 'Big Patient', 'maltepe üniversitesi çankaya/ankara', 2002, 'patient');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212123, 'şifre', 'benim adim eczaci', 'eczaci adres', 1985, 'pharmacist');
+VALUES(2121212123, 'şifre', 'benim adim eczaci', 'eczaci adres', 1985, 'pharmacist');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212124, 'şifre', 'benim isim Pharmaceutical Warehouse', 'işçi adresi', 1903, 'pharmaceuticalwarehouseworker');
+VALUES(2121212124, 'şifre', 'benim isim Pharmaceutical Warehouse', 'işçi adresi', 1903, 'pharmaceuticalwarehouseworker');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(12121212125, 'şifre admin', 'benim isim admin', 'admin adresi', 1905, 'admin');
+VALUES(2121212125, 'şifre admin', 'benim isim admin', 'admin adresi', 1905, 'admin');
 
 INSERT INTO Admin(admin_id)
 VALUES(1);
 
+INSERT INTO Hospital(hospital_id, name, city)
+VALUES(1, 'Başibüyük Hastanesi', 'Adana');
+
 INSERT INTO Doctor(TCK, expertise_field, hospital_id)
-VALUES(12121212121, 'üroloji', 1);
+VALUES(2121212121, 'üroloji', 1);
 
 INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance)
 VALUES(3131, 'banka şifre', 'aktif', 1000);
 
 INSERT INTO Patient(TCK, bank_account_no)
-VALUES(12121212122, 3131);
+VALUES(2121212122, 3131);
 
 INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
 VALUES(1, 'Faruk Eczanesi', 'pompa city');
 
 INSERT INTO Pharmacist(TCK, pharmacy_id)
-VALUES(12121212123, 1);
+VALUES(2121212123, 1);
 
 INSERT INTO PharmaceuticalWarehouse(warehouse_id, warehouse_name, warehouse_city)
 VALUES(1, 'Bizim Depo', 'Ankara');
 
 INSERT INTO PharmaceuticalWarehouseWorker(TCK, warehouse_id)
-VALUES(12121212124, 1);
-
-INSERT INTO Hospital(hospital_id, name, city)
-VALUES(1, 'Başibüyük Hastanesi', 'Adana');
+VALUES(2121212124, 1);
 
 INSERT INTO Illness(illness_name, type)
 VALUES('Flu', 'öldürücü değil');
 
 INSERT INTO HasIllness(patient_TCK, illness_name)
-VALUES(12121212122, 'Flu');
+VALUES(2121212122, 'Flu');
 
 INSERT INTO Prescription(presc_id, date)
 VALUES(1, '2023-03-14 09:00:00');
