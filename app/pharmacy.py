@@ -18,3 +18,28 @@ def add():
 
     connection.commit()
     return data
+
+@pharmacy.route('/remove/<int:id>', methods = ['GET', 'POST', 'DELETE'])
+def remove(id):
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("DELETE FROM Pharmacy WHERE pharmacy_id = %s", [id])
+    connection.commit()
+
+    return "Pharmacy removed successfully"
+
+
+@pharmacy.route('/addHasDrug', methods = ['GET', 'POST'])
+def addHasDrug():
+    data = request.json
+
+    drug_id = data['drug_id']
+    pharmacy_id = data['pharmacy_id']
+
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("INSERT INTO HasDrug(drug_id, pharmacy_id) VALUES(%s, %s)", (drug_id, pharmacy_id))
+    connection.commit()
+
+    return "Drug is added to has drug table successfully"

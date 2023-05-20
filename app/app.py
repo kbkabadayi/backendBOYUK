@@ -12,6 +12,7 @@ CORS(db)
 
 db.register_blueprint(hospital)
 db.register_blueprint(pharmacy)
+db.register_blueprint(warehouse)
 
 @db.route('/')
 @db.route('/data', methods=['GET'])
