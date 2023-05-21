@@ -3,7 +3,7 @@ from database import get_connection
 import MySQLdb.cursors
 from datetime import datetime
 
-prescription = Blueprint('pharmacy', __name__, url_prefix='/prescription')
+prescription = Blueprint('prescription', __name__, url_prefix='/prescription')
 
 @prescription.route('/addPresc', methods = ['GET', 'POST'])
 def add():
