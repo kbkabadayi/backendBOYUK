@@ -53,6 +53,16 @@ def orderDrug():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     for drug_name, count in drug_to_count.items():
+        cursor.execute("SELECT needs_prescription FROM Drug WHERE name = %s", drug_name)
+        requires = cursor.fetchone()['needs_prescription']
+        if requires == 'YES':
+            cursor.execute("SELECT drug_name FROM Contains WHERE presc_id in (SELECT presc_id FROM Prescribes WHERE patient_TCK = %s)", patient_TCK)
+            drugs_prescribed = cursor.fetchall()
+            if drug_name not in drugs_prescribed:
+                return jsonify({"result": "Order contains a drug patient is not prescribed"})
+
+
+
         cursor.execute("UPDATE HasDrug SET drug_count = drug_count - %s WHERE drug_name = %s AND pharmacy_id = %s", (count, drug_name, pharm_id))
         connection.commit()
 
