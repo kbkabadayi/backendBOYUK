@@ -196,31 +196,31 @@ INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
 VALUES("teraflu", "no", "flu drug", "drug type", 56);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212121, 'şifre', 'Big Dick', 'Bilkent üniversitesi çankaya/ankara', 2001, 'doctor');
+VALUES(2121212121, 'passwordDoctor', 'Big Dick', 'Bilkent university cankaya/ankara', 2001, 'doctor');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212122, 'şifre', 'Big Patient', 'maltepe üniversitesi çankaya/ankara', 2002, 'patient');
+VALUES(2121212122, 'passwordPatient', 'Big Patient', 'maltepe university cankaya/ankara', 2002, 'patient');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212123, 'şifre', 'benim adim eczaci', 'eczaci adres', 1985, 'pharmacist');
+VALUES(2121212123, 'passwordPharmacist', 'benim adim eczaci', 'eczaci adres', 1985, 'pharmacist');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212124, 'şifre', 'benim isim Pharmaceutical Warehouse', 'işçi adresi', 1903, 'pharmaceuticalwarehouseworker');
+VALUES(2121212124, 'passwordWorker', 'benim isim Pharmaceutical Warehouse', 'worker adresi', 1903, 'pharmaceuticalwarehouseworker');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212125, 'şifre admin', 'benim isim admin', 'admin adresi', 1905, 'admin');
+VALUES(2121212125, 'password admin', 'benim isim admin', 'admin adresi', 1905, 'admin');
 
 INSERT INTO Admin(admin_id)
 VALUES(1);
 
 INSERT INTO Hospital(hospital_id, name, city)
-VALUES(1, 'Başibüyük Hastanesi', 'Adana');
+VALUES(1, 'Basibuyuk Hastanesi', 'Adana');
 
 INSERT INTO Doctor(TCK, expertise_field, hospital_id)
-VALUES(2121212121, 'üroloji', 1);
+VALUES(2121212121, 'dick science', 1);
 
 INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance)
-VALUES(3131, 'banka şifre', 'aktif', 1000);
+VALUES(3131, 'banka password', 'aktif', 1000);
 
 INSERT INTO Patient(TCK, bank_account_no)
 VALUES(2121212122, 3131);
@@ -238,7 +238,7 @@ INSERT INTO PharmaceuticalWarehouseWorker(TCK, warehouse_id)
 VALUES(2121212124, 1);
 
 INSERT INTO Illness(illness_name, type)
-VALUES('Flu', 'öldürücü değil');
+VALUES('Flu', 'not killing');
 
 INSERT INTO HasIllness(patient_TCK, illness_name)
 VALUES(2121212122, 'Flu');
