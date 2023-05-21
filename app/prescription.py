@@ -28,11 +28,15 @@ def prescribe():
     doctor_TCK = data['doctor_TCK']
     patient_TCK = data['patient_TCK']
     presc_id = data['presc_id']
+    drugs = data['drugs']
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
     cursor.execute("INSERT INTO Prescribes VALUES(%s, %s, %s)", (doctor_TCK, patient_TCK, presc_id))
+
+    for name in drugs:
+        cursor.execute("INSERT INTO Contains VALUES(%s, %s)", (presc_id, name))
 
     connection.commit()
 

@@ -195,6 +195,21 @@ CREATE TABLE HasDosage (
 INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
 VALUES("teraflu", "no", "flu drug", "drug type", 56);
 
+INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
+VALUES("aferin", "no", "headache drug", "drug type", 15);
+
+INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
+VALUES("nurofen", "no", "hard flu drug", "drug type", 20);
+
+INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
+VALUES("arveles", "no", "arvel drug", "drug type", 25);
+
+INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
+VALUES("xanax", "yes", "psikolojik ilac", "drug type", 100);
+
+INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
+VALUES("lustral", "yes", "depression drug", "drug type", 90);
+
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
 VALUES(2121212121, 'passwordDoctor', 'Big Dick', 'Bilkent university cankaya/ankara', 2001, 'doctor');
 
