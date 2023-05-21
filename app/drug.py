@@ -38,7 +38,7 @@ def restockDrug():
         connection.commit()
         cursor.execute("INSERT INTO Restocks VALUES (%s, %s, %s, %s, %s)", (pharm_id, warehouse_id, drug_name, count, restock_date))
         connection.commit()
-    
+
     return jsonify({"result": "Drug restocked to the pharmacy"})
 
 @drug.route('/orderDrug', methods=['POST'])
@@ -70,13 +70,23 @@ def orderDrug():
         cursor.execute("INSERT INTO Orders VALUES (%s, %s, %s, %s, %s, %s)", (bank_account_no, patient_TCK, drug_name, order_date, count, status))
         connection.commit()
 
+        # cursor.execute("SELECT * FROM Cart WHERE TCK = %s AND drug_name = %s", (patient_TCK, drug_name))
+        # exist = cursor.fetchone()
+
+        # if exist is None:
+        #     cursor.execute("INSERT INTO Cart VALUES (%s, %s, %s)", (patient_TCK, drug_name, count))
+        #     connection.commit()
+        # else:
+        #     cursor.execute("UPDATE Cart SET drug_count = drug_count + %s WHERE TCK = %s AND drug_name = %s", (count, patient_TCK,drug_name))
+        #     connection.commit()
+
         cursor.execute("SELECT price FROM Drug where name = %s", (drug_name,))
         price = cursor.fetchone()
         offset = count * price['price']
 
         cursor.execute("UPDATE BankAccount SET balance = balance - %s WHERE bank_account_no = %s", (offset, bank_account_no))
         connection.commit()
-    
+
     return jsonify({"result": "Drug ordered from"})
 
 

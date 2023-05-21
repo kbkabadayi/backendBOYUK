@@ -165,6 +165,14 @@ CREATE TABLE Orders (
     FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK),
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
+CREATE TABLE Cart (
+    TCK INT,
+    drug_name VARCHAR(255),
+    drug_count INT,
+    PRIMARY KEY (TCK, drug_name),
+    FOREIGN KEY (TCK) REFERENCES Patient(TCK),
+    FOREIGN KEY (drug_name) REFERENCES Drug(name)
+);
 
 CREATE TABLE Contains (
     presc_id INT,
