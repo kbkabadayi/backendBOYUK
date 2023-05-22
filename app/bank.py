@@ -52,7 +52,7 @@ def setActive():
 
     return jsonify({"result": "Bank removed"})
 
-@bank.route('/listAccounts', methods=['GET'])
+@bank.route('/listAccounts', methods=['POST'])
 def listAcc():
     data = request.json
     patient_TCK = data['patient_TCK']
