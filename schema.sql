@@ -270,4 +270,4 @@ INSERT INTO Prescription(presc_id, date)
 VALUES(1, '2023-03-14 09:00:00');
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("teraflu", 1, 0);
+VALUES("teraflu", 1, 10);
