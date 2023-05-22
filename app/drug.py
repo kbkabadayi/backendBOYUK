@@ -61,8 +61,6 @@ def orderDrug():
             if drug_name not in drugs_prescribed:
                 return jsonify({"result": "Order contains a drug patient is not prescribed"})
 
-
-
         cursor.execute("UPDATE HasDrug SET drug_count = drug_count - %s WHERE drug_name = %s AND pharmacy_id = %s", (count, drug_name, pharm_id))
         connection.commit()
 
@@ -70,15 +68,8 @@ def orderDrug():
         cursor.execute("INSERT INTO Orders VALUES (%s, %s, %s, %s, %s, %s)", (bank_account_no, patient_TCK, drug_name, order_date, count, status))
         connection.commit()
 
-        # cursor.execute("SELECT * FROM Cart WHERE TCK = %s AND drug_name = %s", (patient_TCK, drug_name))
-        # exist = cursor.fetchone()
-
-        # if exist is None:
-        #     cursor.execute("INSERT INTO Cart VALUES (%s, %s, %s)", (patient_TCK, drug_name, count))
-        #     connection.commit()
-        # else:
-        #     cursor.execute("UPDATE Cart SET drug_count = drug_count + %s WHERE TCK = %s AND drug_name = %s", (count, patient_TCK,drug_name))
-        #     connection.commit()
+        cursor.execute("DELETE FROM Cart WHERE TCK = %s AND pharm_id = %s", (patient_TCK, pharm_id))
+        connection.commit()
 
         cursor.execute("SELECT price FROM Drug where name = %s", (drug_name,))
         price = cursor.fetchone()
