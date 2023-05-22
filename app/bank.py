@@ -19,7 +19,7 @@ def add():
     connection.commit()
     return jsonify({"result": "Bank added"})
 
-@bank.route('/removeAccount', methods=['DELETE'])
+@bank.route('/removeAccount', methods=['POST'])
 def removeAccount():
     data = request.json
     bank_account_no = data['bank_account_no']
