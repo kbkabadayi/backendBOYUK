@@ -32,20 +32,20 @@ CREATE TABLE Doctor (
     FOREIGN KEY (TCK) REFERENCES User(TCK)
 );
 
+CREATE TABLE Patient (
+    TCK INT,
+    PRIMARY KEY (TCK),
+    FOREIGN KEY (TCK) REFERENCES User(TCK)
+);
+
 CREATE TABLE BankAccount (
     bank_account_no INT,
     bank_account_password VARCHAR(40),
     active VARCHAR(40),
     balance INT,
-    PRIMARY KEY (bank_account_no)
-);
-
-CREATE TABLE Patient (
-    TCK INT,
-    bank_account_no INT,
-    PRIMARY KEY (TCK),
-    FOREIGN KEY (bank_account_no) REFERENCES BankAccount(bank_account_no),
-    FOREIGN KEY (TCK) REFERENCES User(TCK)
+    patient_TCK INT,
+    PRIMARY KEY (bank_account_no),
+    FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK)
 );
 
 CREATE TABLE Prescription (
@@ -111,7 +111,7 @@ CREATE TABLE Pharmacist (
 CREATE TABLE Drug (
     name VARCHAR(255) NOT NULL,
     needs_prescription VARCHAR(255),
-    drug_class VARCHAR(255),
+    company VARCHAR(255),
     drug_type VARCHAR(255),
     price INT,
     PRIMARY KEY (name)
@@ -141,17 +141,16 @@ CREATE TABLE HasDrug (
 CREATE TABLE SideEffect (
     effect_name VARCHAR(255) NOT NULL,
     drug_name VARCHAR(255) NOT NULL,
-    intensity INT,
     PRIMARY KEY (effect_name),
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 
-CREATE TABLE Dosage (
-    age_group VARCHAR(255) NOT NULL,
-    no_per_day INT NOT NULL,
-    dosage_per_use INT NOT NULL,
-    PRIMARY KEY (age_group, no_per_day, dosage_per_use)
-);
+-- CREATE TABLE Dosage (
+--     age_group VARCHAR(255) NOT NULL,
+--     no_per_day INT NOT NULL,
+--     dosage_per_use INT NOT NULL,
+--     PRIMARY KEY (age_group, no_per_day, dosage_per_use)
+-- );
 
 CREATE TABLE Orders (
     bank_account_no INT,
@@ -183,41 +182,34 @@ CREATE TABLE Contains (
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 
-CREATE TABLE HasBankAccount (
-    bank_account_no INT,
-    patient_TCK INT,
-    PRIMARY KEY (bank_account_no, patient_TCK),
-    FOREIGN KEY (bank_account_no) REFERENCES BankAccount(bank_account_no),
-    FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK)
-);
 
-CREATE TABLE HasDosage (
-    drug_name varchar(255) NOT NULL,
-    age_group VARCHAR(255) NOT NULL,
-    no_per_day INT NOT NULL,
-    dosage_per_use INT NOT NULL,
-    PRIMARY KEY (drug_name, age_group, no_per_day, dosage_per_use),
-    FOREIGN KEY (age_group, no_per_day, dosage_per_use) REFERENCES Dosage(age_group, no_per_day, dosage_per_use),
-    FOREIGN KEY (drug_name) REFERENCES Drug(name)
-);
+-- CREATE TABLE HasDosage (
+--     drug_name varchar(255) NOT NULL,
+--     age_group VARCHAR(255) NOT NULL,
+--     no_per_day INT NOT NULL,
+--     dosage_per_use INT NOT NULL,
+--     PRIMARY KEY (drug_name, age_group, no_per_day, dosage_per_use),
+--     FOREIGN KEY (age_group, no_per_day, dosage_per_use) REFERENCES Dosage(age_group, no_per_day, dosage_per_use),
+--     FOREIGN KEY (drug_name) REFERENCES Drug(name)
+-- );
 
-INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
-VALUES("teraflu", "no", "flu drug", "drug type", 56);
+INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
+VALUES("teraflu", "no", "abc", "drug type", 56);
 
-INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
-VALUES("aferin", "no", "headache drug", "drug type", 15);
+INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
+VALUES("aferin", "no", "abecas", "drug type", 15);
 
-INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
-VALUES("nurofen", "no", "hard flu drug", "drug type", 20);
+INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
+VALUES("nurofen", "no", "pompake", "drug type", 20);
 
-INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
-VALUES("arveles", "no", "arvel drug", "drug type", 25);
+INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
+VALUES("arveles", "no", "amciksirketi", "drug type", 25);
 
-INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
-VALUES("xanax", "yes", "psikolojik ilac", "drug type", 100);
+INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
+VALUES("xanax", "yes", "psikolojik sirketi", "drug type", 100);
 
-INSERT INTO Drug(name, needs_prescription, drug_class, drug_type, price)
-VALUES("lustral", "yes", "depression drug", "drug type", 90);
+INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
+VALUES("paxera", "yes", "depression sirketi", "drug type", 90);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
 VALUES(2121212121, 'passwordDoctor', 'Big Dick', 'Bilkent university cankaya/ankara', 2001, 'doctor');
@@ -243,11 +235,11 @@ VALUES(1, 'Basibuyuk Hastanesi', 'Adana');
 INSERT INTO Doctor(TCK, expertise_field, hospital_id)
 VALUES(2121212121, 'dick science', 1);
 
-INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance)
-VALUES(3131, 'banka password', 'aktif', 1000);
+INSERT INTO Patient(TCK)
+VALUES(2121212122);
 
-INSERT INTO Patient(TCK, bank_account_no)
-VALUES(2121212122, 3131);
+INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance, patient_TCK)
+VALUES(3131, 'banka password', 'deactive', 1000, 2121212122);
 
 INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
 VALUES(1, 'Faruk Eczanesi', 'pompa city');

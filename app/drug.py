@@ -46,7 +46,6 @@ def orderDrug():
     data = request.json
     drug_to_count = data["drug_to_count"]
     pharm_id = data["pharm_id"]
-    bank_account_no = data["bank_account_no"]
     patient_TCK = data["patient_TCK"]
     order_date = datetime.now()
 
@@ -63,6 +62,9 @@ def orderDrug():
 
         cursor.execute("UPDATE HasDrug SET drug_count = drug_count - %s WHERE drug_name = %s AND pharmacy_id = %s", (count, drug_name, pharm_id))
         connection.commit()
+
+        cursor.execute('SELECT bank_account_no FROM BankAccount WHERE patient_TCK = %s AND active = "active"', (patient_TCK,))
+        bank_account_no = cursor.fetchone()['bank_account_no']
 
         status = "pompa"
         cursor.execute("INSERT INTO Orders VALUES (%s, %s, %s, %s, %s, %s)", (bank_account_no, patient_TCK, drug_name, order_date, count, status))
