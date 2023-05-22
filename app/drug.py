@@ -82,6 +82,61 @@ def orderDrug():
 
     return jsonify({"result": "Drug ordered from"})
 
+@drug.route('/filter', methods = ['GET', 'POST'])
+def filter():
+    data = request.json
+    priceRange = data['priceRange']
+    side_effect = data['side_effect']
+    company = data['company']
+    drug_type = data['drug_type']
+    needs_prescription = data['needs_prescription']
+
+    results = set()
+
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    if priceRange:
+        min_price = priceRange['min']
+        max_price = priceRange['max']
+        cursor.execute("SELECT * FROM Drug WHERE price <= %s AND price >= %s", (min_price, max_price))
+        results.update(cursor.fetchall())
+
+    if side_effect:
+        if len(side_effect) > 0:
+            for i in range(len(side_effect)):
+                cursor.execute("SELECT name, needs_prescription, company, drug_type, price FROM Drug NATURAL JOIN SideEffect WHERE effect_name = %s", (side_effect[i],))
+                results.update(cursor.fetchall())
+
+    if needs_prescription == 0:
+        needs = "no"
+        cursor.execute("SELECT * FROM Drug WHERE needs_prescription = %s", (needs,))
+        results.update(cursor.fetchall())
+
+    if needs_prescription == 1:
+        needs = "yes"
+        cursor.execute("SELECT * FROM Drug WHERE needs_prescription = %s", (needs,))
+        results.update(cursor.fetchall())
+
+    if needs_prescription == 2:
+        cursor.execute("SELECT * FROM Drug")
+        results.update(cursor.fetchall())
+
+    if company:
+        if len(company) > 0:
+            for i in range(len(company)):
+                cursor.execute("SELECT * FROM Drug WHERE company = %s", (company[i],))
+                results.update(cursor.fetchall())
+
+    if drug_type:
+        cursor.execute("SELECT * FROM Drug WHERE drug_type = %s", (drug_type,))
+        results.update(cursor.fetchall())
+
+    results = list(results)
+
+    return jsonify(results)
+
+
 # Burayı şimdilik onur için ekliyoz sonra silcez
 @drug.route('/list', methods = ['GET'])
 def getAll():
