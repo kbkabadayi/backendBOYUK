@@ -82,6 +82,17 @@ def orderDrug():
 
     return jsonify({"result": "Drug ordered from"})
 
+# Burayı şimdilik onur için ekliyoz sonra silcez
+@drug.route('/list', methods = ['GET'])
+def getAll():
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * FROM Drug")
+    data = cursor.fetchall()
+
+    return data
+
 
 
 
