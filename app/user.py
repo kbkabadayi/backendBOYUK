@@ -62,3 +62,15 @@ def delete(TCK):
         connection.commit()
 
     return 'successful'
+
+@user.route('/info', methods=['POST'])
+def info():
+    data = request.json
+    TCK = data["TCK"]
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM User WHERE TCK = %s", (TCK, ))
+
+    user_info = cursor.fetchone()
+    return jsonify(user_info)
+
