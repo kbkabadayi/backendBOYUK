@@ -3,6 +3,7 @@ from database import get_connection
 import MySQLdb.cursors
 from datetime import datetime
 from functools import reduce
+import json
 
 
 drug = Blueprint('drug', __name__, url_prefix='/drug')
@@ -148,7 +149,7 @@ def getAll():
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
     cursor.execute("SELECT * FROM Drug")
-    data = cursor.fetchall()
+    data = json.dumps(cursor.fetchall())
 
     return data
 
