@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, request
 from database import get_connection
 import MySQLdb.cursors
 from datetime import datetime
-from functools import reduce
 import json
 
 
@@ -93,7 +92,8 @@ def filter():
     drug_type = data['drug_type']
     needs_prescription = data['needs_prescription']
 
-    intersection = []  # List to store common records
+    results = []  # List to store the results of cursor.execute
+    common_records = []  # List to store the common records
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
@@ -102,42 +102,42 @@ def filter():
         min_price = priceRange['min']
         max_price = priceRange['max']
         cursor.execute("SELECT * FROM Drug WHERE price <= %s AND price >= %s", (min_price, max_price))
-        intersection.append(cursor.fetchall())
+        results.append(cursor.fetchall())
 
     if side_effect:
         if len(side_effect) > 0:
             for i in range(len(side_effect)):
                 cursor.execute("SELECT name, needs_prescription, company, drug_type, price FROM Drug NATURAL JOIN SideEffect WHERE effect_name = %s", (side_effect[i],))
-                intersection.append(cursor.fetchall())
+                results.append(cursor.fetchall())
 
     if needs_prescription == 0:
         needs = "no"
         cursor.execute("SELECT * FROM Drug WHERE needs_prescription = %s", (needs,))
-        intersection.append(cursor.fetchall())
+        results.append(cursor.fetchall())
 
     if needs_prescription == 1:
         needs = "yes"
         cursor.execute("SELECT * FROM Drug WHERE needs_prescription = %s", (needs,))
-        intersection.append(cursor.fetchall())
+        results.append(cursor.fetchall())
 
     if needs_prescription == 2:
         cursor.execute("SELECT * FROM Drug")
-        intersection.append(cursor.fetchall())
+        results.append(cursor.fetchall())
 
     if company:
         if len(company) > 0:
             for i in range(len(company)):
                 cursor.execute("SELECT * FROM Drug WHERE company = %s", (company[i],))
-                intersection.append(cursor.fetchall())
+                results.append(cursor.fetchall())
 
     if drug_type:
         cursor.execute("SELECT * FROM Drug WHERE drug_type = %s", (drug_type,))
-        intersection.append(cursor.fetchall())
+        results.append(cursor.fetchall())
 
-    # Find the intersection of the results
-    common_records = reduce(lambda x, y: [item for item in x if item in y], intersection)
+    if results:
+        common_records = set(results[0]).intersection(*results[1:])
 
-    json_data = jsonify(common_records)
+    json_data = jsonify(list(common_records))
 
     return json_data
 
