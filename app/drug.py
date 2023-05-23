@@ -135,7 +135,9 @@ def filter():
         results.append(cursor.fetchall())
 
     if results:
-        common_records = set(results[0]).intersection(*results[1:])
+        common_records = set(results[0])
+        for i in range(1,len(results)):
+            common_records = common_records.intersection(results[i])
 
     json_data = jsonify(list(common_records))
 
