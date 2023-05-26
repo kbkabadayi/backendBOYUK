@@ -197,7 +197,7 @@ INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
 VALUES("teraflu", "no", "abc", "drug type", 56);
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
-VALUES("aferin", "no", "abecas", "drug type", 15);
+VALUES("aferin", "no", "abc", "drug type", 15);
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
 VALUES("nurofen", "no", "pompake", "drug type", 20);

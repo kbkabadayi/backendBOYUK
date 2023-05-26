@@ -92,8 +92,8 @@ def filter():
     drug_type = data['drug_type']
     needs_prescription = data['needs_prescription']
 
-    results = []  # List to store the results of cursor.execute
-    common_records = []  # List to store the common records
+    resulting_query = "SELECT name, needs_prescription, company, drug_type, price FROM Drug NATURAL JOIN SideEffect "
+    where_clause = []
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
@@ -101,45 +101,42 @@ def filter():
     if priceRange:
         min_price = priceRange['min']
         max_price = priceRange['max']
-        cursor.execute("SELECT * FROM Drug WHERE price <= %s AND price >= %s", (min_price, max_price))
-        results.append(cursor.fetchall())
+
+        where_clause.append(f" ( price <= {min_price} AND price >= {max_price} ) ")
 
     if side_effect:
         if len(side_effect) > 0:
             for i in range(len(side_effect)):
-                cursor.execute("SELECT name, needs_prescription, company, drug_type, price FROM Drug NATURAL JOIN SideEffect WHERE effect_name = %s", (side_effect[i],))
-                results.append(cursor.fetchall())
+                where_clause.append(f" effect_name = {side_effect[i]} ")
 
     if needs_prescription == 0:
         needs = "no"
-        cursor.execute("SELECT * FROM Drug WHERE needs_prescription = %s", (needs,))
-        results.append(cursor.fetchall())
+        where_clause.append(f" needs_prescription = {needs} ")
+
 
     if needs_prescription == 1:
         needs = "yes"
-        cursor.execute("SELECT * FROM Drug WHERE needs_prescription = %s", (needs,))
-        results.append(cursor.fetchall())
-
-    if needs_prescription == 2:
-        cursor.execute("SELECT * FROM Drug")
-        results.append(cursor.fetchall())
+        where_clause.append(f" needs_prescription = {needs} ")
 
     if company:
         if len(company) > 0:
-            for i in range(len(company)):
-                cursor.execute("SELECT * FROM Drug WHERE company = %s", (company[i],))
-                results.append(cursor.fetchall())
-
+            side_query = "( "
+            for i in range(len(company) - 1):
+                side_query += f" company = {company[i]} OR "
+            side_query += f" company = {company[len(company) - 1]} ) "
+            where_clause.append( side_query)
     if drug_type:
-        cursor.execute("SELECT * FROM Drug WHERE drug_type = %s", (drug_type,))
-        results.append(cursor.fetchall())
+        where_clause.append(f" `drug_type` = '{drug_type}'")
 
-    if results:
-        common_records = set(results[0])
-        for i in range(1,len(results)):
-            common_records = common_records.intersection(results[i])
+    if len(where_clause) != 0:
+        resulting_query += " WHERE"
+        for i in range(len(where_clause) - 1):
+            resulting_query += where_clause[i] + " AND "
+        resulting_query += where_clause[len(where_clause) - 1]
 
-    json_data = jsonify(list(common_records))
+    cursor.execute(resulting_query)
+    result = cursor.fetchall()
+    json_data = jsonify(list(result))
 
     return json_data
 
