@@ -123,7 +123,7 @@ def filter():
             side_query = "( "
             for i in range(len(company) - 1):
                 side_query += f" company = {company[i]} OR "
-            side_query += f" company = {company[len(company) - 1]} ) "
+            side_query += f" company = '{company[len(company) - 1]}' ) "
             where_clause.append( side_query)
     if drug_type:
         where_clause.append(f" `drug_type` = '{drug_type}'")
