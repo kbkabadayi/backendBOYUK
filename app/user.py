@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session
 from database import get_connection
 import MySQLdb.cursors
 
@@ -74,3 +74,30 @@ def info():
     user_info = cursor.fetchone()
     return jsonify(user_info)
 
+@user.route('/login', methods = ['GET', 'POST'])
+def login():
+    data = request.json
+    tck = data['TCK']
+    password = data['password']
+
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM User WHERE TCK = %s AND password = %s", (tck, password))
+    exist = cursor.fetchone()
+
+    if exist:
+        session['loggedin'] = True
+        session['TCK'] = tck
+        session['password'] = password
+        return "Sucessfully logged in"
+    
+    return "Your TCK or password is not valid. Try again"
+
+@user.route('/logout', methods = ['GET', 'POST'])
+def logout():
+    session['TCK'] = None
+    session['password'] = None
+    session['loggedin'] = False
+
+    return "Successfully logged out"
+    
