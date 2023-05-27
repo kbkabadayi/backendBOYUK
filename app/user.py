@@ -89,7 +89,7 @@ def login():
         session['loggedin'] = True
         session['TCK'] = tck
         session['password'] = password
-        return "Sucessfully logged in"
+        return jsonify(exist)
     
     return "Your TCK or password is not valid. Try again"
 
