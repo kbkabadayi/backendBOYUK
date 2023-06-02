@@ -13,6 +13,7 @@ from user import user
 from illness import illness
 from prescription import prescription
 from cart import cart
+from analysis import analysis
 
 #app = Flask(__name__)
 CORS(db)
@@ -26,6 +27,7 @@ db.register_blueprint(user)
 db.register_blueprint(illness)
 db.register_blueprint(prescription)
 db.register_blueprint(cart)
+db.register_blueprint(analysis)
 
 
 @db.route('/')

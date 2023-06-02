@@ -169,7 +169,7 @@ CREATE TABLE Cart (
     drug_name VARCHAR(255),
     drug_count INT,
     pharm_id INT,
-    PRIMARY KEY (TCK, drug_name, pharm_id),
+    PRIMARY KEY (TCK),
     FOREIGN KEY (TCK) REFERENCES Patient(TCK),
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
@@ -239,7 +239,7 @@ INSERT INTO Patient(TCK)
 VALUES(2121212122);
 
 INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance, patient_TCK)
-VALUES(3131, 'banka password', 'deactive', 1000, 2121212122);
+VALUES(3131, 'banka password', 'active', 1000, 2121212122);
 
 INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
 VALUES(1, 'Faruk Eczanesi', 'pompa city');
@@ -262,5 +262,14 @@ VALUES(2121212122, 'Flu');
 INSERT INTO Prescription(presc_id, date)
 VALUES(1, '2023-03-14 09:00:00');
 
+-- INSERT INTO Contains(presc_id, drug_name)
+-- VALUES(1, "paxera")
+
+INSERT INTO Prescribes(doctor_TCK, patient_TCK, presc_id)
+VALUES(2121212121, 2121212122, 1);
+
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
 VALUES("teraflu", 1, 10);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("paxera", 1, 5);
