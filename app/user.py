@@ -25,8 +25,7 @@ def add():
         cursor.execute("INSERT INTO Doctor(TCK, expertise_field, hospital_id) VALUES (%s, %s, %s)", (TCK, expertise_field, hospital_id,))
         connection.commit()
     elif role == "patient":
-        bank_account_no = user_data["bank_account_no"]
-        cursor.execute("INSERT INTO Patient(TCK, bank_account_no) VALUES (%s, %s)", (TCK, bank_account_no,))
+        cursor.execute("INSERT INTO Patient(TCK) VALUES (%s)", (TCK,))
         connection.commit()
     elif role == "pharmaceuticalwarehouseworker":
         warehouse_id = user_data["warehouse_id"]
@@ -90,7 +89,7 @@ def login():
         session['TCK'] = tck
         session['password'] = password
         return jsonify(exist)
-    
+
     return "Your TCK or password is not valid. Try again"
 
 @user.route('/logout', methods = ['GET', 'POST'])
@@ -100,4 +99,4 @@ def logout():
     session['loggedin'] = False
 
     return "Successfully logged out"
-    
+
