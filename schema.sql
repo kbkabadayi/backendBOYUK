@@ -193,8 +193,8 @@ CREATE TABLE Contains (
 --     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 -- );
 CREATE VIEW CartView AS
-SELECT c.drug_name, c.drug_count, c.TCK, c.drug_count * d.price AS total_price
-FROM Cart c JOIN Drug d ON c.drug_name = d.name ;
+SELECT drug_name, drug_count, TCK, drug_count * price AS total_price
+FROM Cart JOIN Drug  ON drug_name = name ;
 
 -- CREATE VIEW PastOrderView AS
 -- SELECT *
@@ -281,3 +281,6 @@ VALUES("teraflu", 1, 10);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
 VALUES("paxera", 1, 5);
+
+INSERT INTO Cart(TCK, drug_name, drug_count, pharm_id )
+VALUES( 2121212122, "teraflu", 3,1 );

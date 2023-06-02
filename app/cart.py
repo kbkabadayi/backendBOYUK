@@ -21,7 +21,7 @@ def pay():
         connection.commit()
     else:
         cursor.execute("UPDATE Cart SET drug_count = drug_count + 1 WHERE TCK = %s AND drug_name = %s", ( patient_TCK,drug_name))
-        connection.commit()    
+        connection.commit()
     return jsonify({"result": "Drug added to cart"})
 
 @cart.route('/removeFromCart', methods=['POST'])
@@ -38,13 +38,13 @@ def decrement():
     if exist["drug_count"] == 1:
         cursor.execute("DELETE FROM Cart WHERE TCK = %s AND drug_name = %s AND pharm_id = %s", (patient_TCK,drug_name, pharm_id))
         connection.commit()
-    
+
     else:
         cursor.execute("UPDATE Cart SET drug_count = drug_count - 1 WHERE TCK = %s AND drug_name = %s AND pharm_id = %s", ( patient_TCK,drug_name, pharm_id))
-        connection.commit()   
-    
+        connection.commit()
+
     return jsonify({"result": "Drug decremented from cart"})
-    
+
 
 @cart.route('/show', methods = ['POST'])
 def show():
@@ -53,7 +53,7 @@ def show():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM Cart, Drug WHERE drug_name = name AND TCK = %s", (TCK,))
+    cursor.execute("SELECT * FROM CartView WHERE TCK = %s", (TCK,))
     result = json.dumps(cursor.fetchall())
     return result
 
