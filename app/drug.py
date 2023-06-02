@@ -73,7 +73,8 @@ def orderDrug():
 
 
         if (count > count_in_pharm):
-            return "Not enough " + drug_name + " in pharmacy"
+            result_text = "Not enough " + drug_name + " in pharmacy"
+            return jsonify({"status": "fail", "result": result_text})
 
         cursor.execute("SELECT needs_prescription FROM Drug WHERE name = %s", (drug_name,))
         requires = cursor.fetchone()['needs_prescription']
@@ -83,7 +84,7 @@ def orderDrug():
             pompa = {"drug_name": drug_name}
                 
             if pompa not in drugs_prescribed:
-                return jsonify({"result": "Order contains a drug patient is not prescribed"})
+                return jsonify({"status": "fail", "result": "Order contains a drug patient is not prescribed"})
 
 
     # process order
@@ -107,7 +108,7 @@ def orderDrug():
 
     cursor.execute("UPDATE BankAccount SET balance = balance - %s WHERE bank_account_no = %s", (totalPrice, bank_account_no))
     connection.commit()
-    return jsonify({"result": "Drug ordered from"})
+    return jsonify({"status": "success", "result": "Drug ordered from"})
 
 @drug.route('/filter', methods = ['GET', 'POST'])
 def filter():
