@@ -192,6 +192,14 @@ CREATE TABLE Contains (
 --     FOREIGN KEY (age_group, no_per_day, dosage_per_use) REFERENCES Dosage(age_group, no_per_day, dosage_per_use),
 --     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 -- );
+CREATE VIEW CartView AS
+SELECT c.drug_name, c.drug_count, c.TCK, c.drug_count * d.price AS total_price
+FROM Cart c JOIN Drug d ON c.drug_name = d.name ;
+
+-- CREATE VIEW PastOrderView AS
+-- SELECT *
+-- FROM Orders o, Orders p
+-- WHERE o.patient_TCK = p.patient_TCK AND o.bank_account_no = p.bank_account_no AND o.order_date = p.order_date AND o.drug_name <> p.drug_name;
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
 VALUES("teraflu", "no", "abc", "drug type", 56);

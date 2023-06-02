@@ -49,14 +49,51 @@ def create_doctor_analysis():
             doctor_count = result[1] # number of occurences
 
             cursor.execute('SELECT fullname FROM User WHERE TCK = %s', (doctor_TCK,))
-            doctor_data = cursor.fetchone()['fullname']
+            doctor_data = cursor.fetchone()
 
-            doctor_analysis_data = {
-                "doctor_fullname": doctor_data,
-                "presc_count": doctor_count
-            }
+            if doctor_data is not None:
+                doctor_full_name = doctor_data['fullname']
 
-            return jsonify(doctor_analysis_data)
+                doctor_analysis_data = {
+                    "doctor_fullname": doctor_full_name,
+                    "presc_count": doctor_count
+                }
+
+                return jsonify(doctor_analysis_data)
 
         else:
             return "Error no doctor"
+
+@analysis.route('/createMoneyAnalysis', methods = ['GET','POST'])
+def create_money_analysis():
+    data = request.json
+    will_be_created = data['create']
+    patient_TCK = data['patient_TCK']
+
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    if will_be_created == "yes":
+        today = datetime.date.today()
+        five_months_ago = today - datetime.timedelta(days=30*5)
+        cursor.execute('SELECT drug_name, count, order_date FROM Orders WHERE patient_TCK = %s AND order_date >= %s', (patient_TCK, five_months_ago))
+        orders = cursor.fetchall()
+
+        total_spent = 0
+
+        for order in orders:
+            drug_name = order[0]['drug_name']
+            count = order[1]['count']
+            
+            cursor.execute('SELECT price FROM Drug WHERE name = %s', (drug_name,))
+            drug_price = cursor.fetchone()['price']
+            
+            total_spent += drug_price * count
+
+        average_spent = total_spent / 5
+
+        average_spent_object = {
+            "average_spent": average_spent
+        }
+
+        return jsonify(average_spent_object)
