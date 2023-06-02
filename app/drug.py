@@ -86,50 +86,51 @@ def orderDrug():
 @drug.route('/filter', methods = ['GET', 'POST'])
 def filter():
     data = request.json
-    priceRange = data['priceRange']
-    side_effect = data['side_effect']
+    min_price = data['min_price']
+    max_price = data['max_price']
+    # side_effect = data['side_effect']
     company = data['company']
     drug_type = data['drug_type']
     needs_prescription = data['needs_prescription']
 
-    resulting_query = "SELECT name, needs_prescription, company, drug_type, price FROM Drug NATURAL JOIN SideEffect "
+    resulting_query = "SELECT * FROM Drug "
     where_clause = []
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    if priceRange:
-        min_price = priceRange['min']
-        max_price = priceRange['max']
+    if min_price:
+        where_clause.append(f" price >= {min_price} ")
 
-        where_clause.append(f" ( price <= {min_price} AND price >= {max_price} ) ")
+    if max_price:
+        where_clause.append(f" price <= {max_price} ")
 
-    if side_effect:
-        if len(side_effect) > 0:
-            for i in range(len(side_effect)):
-                where_clause.append(f" effect_name = {side_effect[i]} ")
+    # if side_effect:
+    #     if len(side_effect) > 0:
+    #         for i in range(len(side_effect)):
+    #             where_clause.append(f" effect_name = {side_effect[i]} ")
 
     if needs_prescription == 0:
         needs = "no"
-        where_clause.append(f" needs_prescription = {needs} ")
+        where_clause.append(f" needs_prescription = '{needs}' ")
 
 
     if needs_prescription == 1:
         needs = "yes"
-        where_clause.append(f" needs_prescription = {needs} ")
+        where_clause.append(f" needs_prescription = '{needs}' ")
 
     if company:
         if len(company) > 0:
             side_query = "( "
             for i in range(len(company) - 1):
-                side_query += f" company = {company[i]} OR "
+                side_query += f" company = '{company[i]}' OR "
             side_query += f" company = '{company[len(company) - 1]}' ) "
             where_clause.append( side_query)
     if drug_type:
-        where_clause.append(f" `drug_type` = '{drug_type}'")
+        where_clause.append(f" drug_type = '{drug_type}'")
 
-    if len(where_clause) != 0:
-        resulting_query += " WHERE"
+    if len(where_clause) > 0:
+        resulting_query += " WHERE "
         for i in range(len(where_clause) - 1):
             resulting_query += where_clause[i] + " AND "
         resulting_query += where_clause[len(where_clause) - 1]
@@ -137,6 +138,7 @@ def filter():
     cursor.execute(resulting_query)
     result = cursor.fetchall()
     json_data = jsonify(list(result))
+
 
     return json_data
 
