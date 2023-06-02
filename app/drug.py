@@ -110,7 +110,7 @@ def orderDrug():
     connection.commit()
     return jsonify({"status": "success", "result": "Drug ordered from"})
 
-@drug.route('/filter', methods = ['GET', 'POST'])
+@drug.route('/filter', methods = ['POST'])
 def filter():
     data = request.json
     min_price = data['min_price']
@@ -137,12 +137,12 @@ def filter():
     #         for i in range(len(side_effect)):
     #             where_clause.append(f" effect_name = {side_effect[i]} ")
 
-    if needs_prescription == 0:
+    if needs_prescription == "0":
         needs = "no"
         where_clause.append(f" needs_prescription = '{needs}' ")
 
 
-    if needs_prescription == 1:
+    if needs_prescription == "1":
         needs = "yes"
         where_clause.append(f" needs_prescription = '{needs}' ")
 
@@ -153,7 +153,7 @@ def filter():
                 side_query += f" company = '{company[i]}' OR "
             side_query += f" company = '{company[len(company) - 1]}' ) "
             where_clause.append( side_query)
-    if drug_type:
+    if drug_type != "all":
         where_clause.append(f" drug_type = '{drug_type}'")
 
     if len(where_clause) > 0:
@@ -164,7 +164,7 @@ def filter():
 
     cursor.execute(resulting_query)
     result = cursor.fetchall()
-    json_data = jsonify(list(result))
+    json_data = jsonify(result)
 
 
     return json_data
