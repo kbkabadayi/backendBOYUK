@@ -169,7 +169,7 @@ CREATE TABLE Cart (
     drug_name VARCHAR(255),
     drug_count INT,
     pharm_id INT,
-    PRIMARY KEY (TCK),
+    PRIMARY KEY (TCK, drug_name, pharm_id),
     FOREIGN KEY (TCK) REFERENCES Patient(TCK),
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
@@ -262,8 +262,8 @@ VALUES(2121212122, 'Flu');
 INSERT INTO Prescription(presc_id, date)
 VALUES(1, '2023-03-14 09:00:00');
 
--- INSERT INTO Contains(presc_id, drug_name)
--- VALUES(1, "paxera")
+INSERT INTO Contains(presc_id, drug_name)
+VALUES(1, "paxera");
 
 INSERT INTO Prescribes(doctor_TCK, patient_TCK, presc_id)
 VALUES(2121212121, 2121212122, 1);

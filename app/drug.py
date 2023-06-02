@@ -71,7 +71,9 @@ def orderDrug():
         if requires.lower() == 'yes':
             cursor.execute("SELECT drug_name FROM Contains WHERE presc_id in (SELECT presc_id FROM Prescribes WHERE patient_TCK = %s)", (patient_TCK,))
             drugs_prescribed = cursor.fetchall()
-            if drug_name not in drugs_prescribed:
+            pompa = {"drug_name": drug_name}
+                
+            if pompa not in drugs_prescribed:
                 return jsonify({"result": "Order contains a drug patient is not prescribed"})
 
 
