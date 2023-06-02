@@ -84,10 +84,9 @@ def create_money_analysis():
         for order in orders:
             drug_name = order[0]['drug_name']
             count = order[1]['count']
-            order_date = order[2]['order_date']
             
             cursor.execute('SELECT price FROM Drug WHERE name = %s', (drug_name,))
-            drug_price = cursor.fetchone()[0]['drug_price']
+            drug_price = cursor.fetchone()['price']
             
             total_spent += drug_price * count
 
