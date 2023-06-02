@@ -5,7 +5,7 @@ import json
 
 cart = Blueprint('cart', __name__, url_prefix='/cart')
 
-@cart.route('/addCart', methods=['POST'])
+@cart.route('/addToCart', methods=['POST'])
 def pay():
     cart_data = request.json
     patient_TCK = cart_data["patient_TCK"]
@@ -24,7 +24,7 @@ def pay():
         connection.commit()    
     return jsonify({"result": "Drug added to cart"})
 
-@cart.route('/decrementDrug', methods=['POST'])
+@cart.route('/removeFromCart', methods=['POST'])
 def decrement():
     cart_data = request.json
     patient_TCK = cart_data["patient_TCK"]

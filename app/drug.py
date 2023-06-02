@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, request
 from database import get_connection
 import MySQLdb.cursors
 from datetime import datetime
-import json
 
 
 drug = Blueprint('drug', __name__, url_prefix='/drug')
@@ -45,21 +44,41 @@ def restockDrug():
 @drug.route('/orderDrug', methods=['POST'])
 def orderDrug():
     data = request.json
-    drug_to_count = data["drug_to_count"]
     pharm_id = data["pharm_id"]
     patient_TCK = data["patient_TCK"]
     order_date = datetime.now()
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-    for drug_name, count in drug_to_count.items():
+
+    cursor.execute("SELECT drug_name, drug_count FROM Cart WHERE TCK = %s", (patient_TCK,))
+    drug_to_count = cursor.fetchall()
+
+
+    totalPrice = 0
+    # check preconditions
+    for i in range(len(drug_to_count)):
+        drug_name = drug_to_count[i]['drug_name']
+        count = drug_to_count[i]['drug_count']
+        
+        cursor.execute("SELECT price FROM Drug where name = %s", (drug_name,))
+        price = cursor.fetchone()['price']
+
+        totalPrice += price * count
+
         cursor.execute("SELECT needs_prescription FROM Drug WHERE name = %s", (drug_name,))
         requires = cursor.fetchone()['needs_prescription']
         if requires.lower() == 'yes':
-            cursor.execute("SELECT drug_name FROM Contains WHERE presc_id in (SELECT presc_id FROM Prescribes WHERE patient_TCK = %s)", patient_TCK)
+            cursor.execute("SELECT drug_name FROM Contains WHERE presc_id in (SELECT presc_id FROM Prescribes WHERE patient_TCK = %s)", (patient_TCK,))
             drugs_prescribed = cursor.fetchall()
             if drug_name not in drugs_prescribed:
                 return jsonify({"result": "Order contains a drug patient is not prescribed"})
+
+
+    # process order
+    for i in range(len(drug_to_count)):
+        drug_name = drug_to_count[i]['drug_name']
+        count = drug_to_count[i]['drug_count']
 
         cursor.execute("UPDATE HasDrug SET drug_count = drug_count - %s WHERE drug_name = %s AND pharmacy_id = %s", (count, drug_name, pharm_id))
         connection.commit()
@@ -73,14 +92,10 @@ def orderDrug():
 
         cursor.execute("DELETE FROM Cart WHERE TCK = %s AND pharm_id = %s", (patient_TCK, pharm_id))
         connection.commit()
+        
 
-        cursor.execute("SELECT price FROM Drug where name = %s", (drug_name,))
-        price = cursor.fetchone()
-        offset = count * price['price']
-
-        cursor.execute("UPDATE BankAccount SET balance = balance - %s WHERE bank_account_no = %s", (offset, bank_account_no))
-        connection.commit()
-
+    cursor.execute("UPDATE BankAccount SET balance = balance - %s WHERE bank_account_no = %s", (totalPrice, bank_account_no))
+    connection.commit()
     return jsonify({"result": "Drug ordered from"})
 
 @drug.route('/filter', methods = ['GET', 'POST'])
@@ -92,8 +107,7 @@ def filter():
     drug_type = data['drug_type']
     needs_prescription = data['needs_prescription']
 
-    resulting_query = "SELECT name, needs_prescription, company, drug_type, price FROM Drug NATURAL JOIN SideEffect "
-    where_clause = []
+    results = set()
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
@@ -101,44 +115,42 @@ def filter():
     if priceRange:
         min_price = priceRange['min']
         max_price = priceRange['max']
-
-        where_clause.append(f" ( price <= {min_price} AND price >= {max_price} ) ")
+        cursor.execute("SELECT * FROM Drug WHERE price <= %s AND price >= %s", (min_price, max_price))
+        results.update(cursor.fetchall())
 
     if side_effect:
         if len(side_effect) > 0:
             for i in range(len(side_effect)):
-                where_clause.append(f" effect_name = {side_effect[i]} ")
+                cursor.execute("SELECT name, needs_prescription, company, drug_type, price FROM Drug NATURAL JOIN SideEffect WHERE effect_name = %s", (side_effect[i],))
+                results.update(cursor.fetchall())
 
     if needs_prescription == 0:
         needs = "no"
-        where_clause.append(f" needs_prescription = {needs} ")
-
+        cursor.execute("SELECT * FROM Drug WHERE needs_prescription = %s", (needs,))
+        results.update(cursor.fetchall())
 
     if needs_prescription == 1:
         needs = "yes"
-        where_clause.append(f" needs_prescription = {needs} ")
+        cursor.execute("SELECT * FROM Drug WHERE needs_prescription = %s", (needs,))
+        results.update(cursor.fetchall())
+
+    if needs_prescription == 2:
+        cursor.execute("SELECT * FROM Drug")
+        results.update(cursor.fetchall())
 
     if company:
         if len(company) > 0:
-            side_query = "( "
-            for i in range(len(company) - 1):
-                side_query += f" company = {company[i]} OR "
-            side_query += f" company = '{company[len(company) - 1]}' ) "
-            where_clause.append( side_query)
+            for i in range(len(company)):
+                cursor.execute("SELECT * FROM Drug WHERE company = %s", (company[i],))
+                results.update(cursor.fetchall())
+
     if drug_type:
-        where_clause.append(f" `drug_type` = '{drug_type}'")
+        cursor.execute("SELECT * FROM Drug WHERE drug_type = %s", (drug_type,))
+        results.update(cursor.fetchall())
 
-    if len(where_clause) != 0:
-        resulting_query += " WHERE"
-        for i in range(len(where_clause) - 1):
-            resulting_query += where_clause[i] + " AND "
-        resulting_query += where_clause[len(where_clause) - 1]
+    results = list(results)
 
-    cursor.execute(resulting_query)
-    result = cursor.fetchall()
-    json_data = jsonify(list(result))
-
-    return json_data
+    return jsonify(results)
 
 
 # Burayı şimdilik onur için ekliyoz sonra silcez
@@ -148,7 +160,7 @@ def getAll():
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
     cursor.execute("SELECT * FROM Drug")
-    data = json.dumps(cursor.fetchall())
+    data = cursor.fetchall()
 
     return data
 
