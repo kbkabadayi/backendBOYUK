@@ -178,7 +178,7 @@ def getAll():
     cursor.execute("SELECT * FROM Drug")
     data = cursor.fetchall()
 
-    return data
+    return jsonify(data)
 
 
 

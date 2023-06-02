@@ -53,7 +53,7 @@ def show():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM Cart WHERE TCK = %s", (TCK,))
+    cursor.execute("SELECT * FROM Cart, Drug WHERE drug_name = name AND TCK = %s", (TCK,))
     result = json.dumps(cursor.fetchall())
     return result
 
