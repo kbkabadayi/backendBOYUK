@@ -66,6 +66,13 @@ def orderDrug():
 
         totalPrice += price * count
 
+        cursor.execute("SELECT drug_count FROM HasDrug WHERE pharmacy_id = %s", (pharm_id,))
+        count_in_pharm = cursor.fetchone()['drug_count']
+
+
+        if (count > count_in_pharm):
+            return "Not enough " + drug_name + " in pharmacy"
+
         cursor.execute("SELECT needs_prescription FROM Drug WHERE name = %s", (drug_name,))
         requires = cursor.fetchone()['needs_prescription']
         if requires.lower() == 'yes':
