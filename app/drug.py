@@ -44,12 +44,14 @@ def restockDrug():
 @drug.route('/orderDrug', methods=['POST'])
 def orderDrug():
     data = request.json
-    pharm_id = data["pharm_id"]
     patient_TCK = data["patient_TCK"]
     order_date = datetime.now()
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT pharm_id FROM Cart WHERE TCK = %s", (patient_TCK,))
+    pharm_id = cursor.fetchone()['pharm_id']
 
     cursor.execute("SELECT drug_name, drug_count FROM Cart WHERE TCK = %s", (patient_TCK,))
     drug_to_count = cursor.fetchall()
