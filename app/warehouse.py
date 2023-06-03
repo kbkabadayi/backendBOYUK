@@ -18,7 +18,7 @@ def add():
 
     connection.commit()
 
-    return "Warehouse added successfully"
+    return "success"
 
 @warehouse.route('/remove/<int:id>', methods = ['DELETE'])
 def remove(id):
@@ -27,7 +27,7 @@ def remove(id):
     cursor.execute("DELETE FROM PharmaceuticalWarehouse WHERE warehouse_id = %s", [id])
 
     connection.commit()
-    return "Warehouse removed sueccessfully"
+    return "success"
 
 
 @warehouse.route('/listRestocks', methods=['POST','GET'])
