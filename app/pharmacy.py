@@ -17,7 +17,7 @@ def add():
     cursor.execute("INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city) VALUES (%s, %s, %s)", (pharm_id, pharm_name, pharm_city))
 
     connection.commit()
-    return data
+    return "success"
 
 @pharmacy.route('/remove/<int:id>', methods = ['GET', 'POST', 'DELETE'])
 def remove(id):
@@ -26,7 +26,7 @@ def remove(id):
     cursor.execute("DELETE FROM Pharmacy WHERE pharmacy_id = %s", [id])
     connection.commit()
 
-    return "Pharmacy removed successfully"
+    return "success"
 
 @pharmacy.route('/list', methods = ['POST'])
 def listall():
