@@ -221,6 +221,15 @@ def getAll():
     return jsonify({"companies": companies, "range": priceRange, "categories": categories})
 
 
+@drug.route('/ugur', methods=['GET'])
+def pampi():
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * FROM Drug")
+    data = cursor.fetchall()
+    return jsonify(data)
+
 
 
 
