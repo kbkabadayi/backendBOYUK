@@ -100,3 +100,13 @@ def logout():
 
     return "Successfully logged out"
 
+
+@user.route('/listOrders', methods = ['GET'])
+def listOrders():
+    data = request.json
+    TCK = data["patient_TCK"]
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * FROM Orders WHERE patient_TCK = %s", (TCK,))
+    return jsonify(cursor.fetchall())

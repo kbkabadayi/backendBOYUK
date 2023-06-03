@@ -57,6 +57,7 @@ def orderDrug():
     drug_to_count = cursor.fetchall()
 
 
+
     totalPrice = 0
     # check preconditions
     for i in range(len(drug_to_count)):
@@ -68,9 +69,8 @@ def orderDrug():
 
         totalPrice += price * count
 
-        cursor.execute("SELECT drug_count FROM HasDrug WHERE pharmacy_id = %s", (pharm_id,))
+        cursor.execute("SELECT drug_count FROM HasDrug WHERE pharmacy_id = %s AND drug_name = %s", (pharm_id, drug_name))
         count_in_pharm = cursor.fetchone()['drug_count']
-
 
         if (count > count_in_pharm):
             result_text = "Not enough " + drug_name + " in pharmacy"

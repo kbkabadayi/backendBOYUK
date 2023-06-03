@@ -46,14 +46,13 @@ def decrement():
     return jsonify({"result": "Drug decremented from cart"})
 
 
-@cart.route('/show', methods = ['POST'])
+@cart.route('/show', methods = ['GET'])
 def show():
     data = request.json
     TCK = data["patient_TCK"]
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM CartView WHERE TCK = %s", (TCK,))
-    result = json.dumps(cursor.fetchall())
-    return result
+    cursor.execute("SELECT * FROM Cart, Drug WHERE name = drug_name AND TCK = %s", (TCK,))
+    return jsonify(cursor.fetchall())
 

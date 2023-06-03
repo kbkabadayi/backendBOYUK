@@ -29,3 +29,13 @@ def remove(id):
     connection.commit()
     return "Warehouse removed sueccessfully"
     
+
+@warehouse.route('/listRestocks', methods=['GET'])
+def show():
+    data = request.json
+    pharm_id = data["pharm_id"]
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * FROM Restocks WHERE pharm_id = %s", (pharm_id,))
+    return jsonify(cursor.fetchall())
