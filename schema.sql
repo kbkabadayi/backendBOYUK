@@ -49,7 +49,7 @@ CREATE TABLE BankAccount (
 );
 
 CREATE TABLE Prescription (
-    presc_id INT,
+    presc_id INT NOT NULL AUTO_INCREMENT,
     date DATETIME,
     PRIMARY KEY (presc_id)
 );
@@ -267,14 +267,14 @@ VALUES('Flu', 'not killing');
 INSERT INTO HasIllness(patient_TCK, illness_name)
 VALUES(2121212122, 'Flu');
 
-INSERT INTO Prescription(presc_id, date)
-VALUES(1, '2023-03-14 09:00:00');
+INSERT INTO Prescription( date)
+VALUES( '2023-03-14 09:00:00');
 
 INSERT INTO Contains(presc_id, drug_name)
 VALUES(1, "paxera");
 
-INSERT INTO Prescribes(doctor_TCK, patient_TCK, presc_id)
-VALUES(2121212121, 2121212122, 1);
+INSERT INTO Prescribes(presc_id, doctor_TCK, patient_TCK)
+VALUES(1, 2121212121, 2121212122);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
 VALUES("teraflu", 1, 10);
