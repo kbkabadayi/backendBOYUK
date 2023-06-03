@@ -109,9 +109,10 @@ def orderDrug():
         cursor.execute('SELECT bank_account_no FROM BankAccount WHERE patient_TCK = %s AND active = "active"', (patient_TCK,))
         bank_account_no = cursor.fetchone()['bank_account_no']
         
+        cursor.execute("SELECT price FROM Drug where name = %s", (drug_name,))
+        price = cursor.fetchone()['price']
 
-        status = "pompa"
-        cursor.execute("INSERT INTO Orders VALUES (%s, %s, %s, %s, %s, %s)", (bank_account_no, patient_TCK, drug_name, order_date, count, status))
+        cursor.execute("INSERT INTO Orders VALUES (%s, %s, %s, %s, %s, %s)", (bank_account_no, patient_TCK, drug_name, order_date, count, price * count))
         connection.commit()
 
         cursor.execute("DELETE FROM Cart WHERE TCK = %s AND pharm_id = %s", (patient_TCK, pharm_id))

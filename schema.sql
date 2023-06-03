@@ -158,7 +158,7 @@ CREATE TABLE Orders (
     drug_name VARCHAR(255),
     order_date DATETIME,
     count INT,
-    status VARCHAR(40),
+    total_price INT,
     PRIMARY KEY (bank_account_no, drug_name, patient_TCK, order_date),
     FOREIGN KEY (bank_account_no) REFERENCES BankAccount(bank_account_no),
     FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK),

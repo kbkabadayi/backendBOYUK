@@ -101,7 +101,7 @@ def logout():
     return "Successfully logged out"
 
 
-@user.route('/listOrders', methods = ['GET'])
+@user.route('/listOrders', methods = ['POST'])
 def listOrders():
     data = request.json
     TCK = data["patient_TCK"]
