@@ -51,6 +51,7 @@ CREATE TABLE BankAccount (
 CREATE TABLE Prescription (
     presc_id INT NOT NULL AUTO_INCREMENT,
     date DATETIME,
+    illness VARCHAR(255),
     PRIMARY KEY (presc_id)
 );
 
@@ -193,7 +194,7 @@ CREATE TABLE Contains (
 --     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 -- );
 CREATE VIEW CartView AS
-SELECT drug_name, drug_count, TCK, drug_count * price AS total_price
+SELECT drug_name, company, needs_prescription, drug_count, TCK, price
 FROM Cart JOIN Drug  ON drug_name = name ;
 
 -- CREATE VIEW PastOrderView AS
@@ -267,8 +268,8 @@ VALUES('Flu', 'not killing');
 INSERT INTO HasIllness(patient_TCK, illness_name)
 VALUES(2121212122, 'Flu');
 
-INSERT INTO Prescription( date)
-VALUES( '2023-03-14 09:00:00');
+INSERT INTO Prescription( date, illness)
+VALUES( '2023-03-14 09:00:00', "dig bick");
 
 INSERT INTO Contains(presc_id, drug_name)
 VALUES(1, "paxera");

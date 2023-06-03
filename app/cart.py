@@ -53,6 +53,6 @@ def show():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM Cart, Drug WHERE name = drug_name AND TCK = %s", (TCK,))
+    cursor.execute("SELECT * FROM CartView WHERE TCK = %s", (TCK,))
     return jsonify(cursor.fetchall())
 

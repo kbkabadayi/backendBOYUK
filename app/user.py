@@ -108,5 +108,16 @@ def listOrders():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM Orders WHERE patient_TCK = %s", (TCK,))
+    cursor.execute("SELECT * FROM Orders WHERE patient_TCK = %s ORDER BY order_date ASC", (TCK,))
+    return jsonify(cursor.fetchall())
+
+
+@user.route('/listPrescriptions', methods = ['POST'])
+def listPreservative():
+    data = request.json
+    TCK = data["patient_TCK"]
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * FROM Prescription WHERE patient_TCK = %s ORDER BY order_date ASC", (TCK,))
     return jsonify(cursor.fetchall())
