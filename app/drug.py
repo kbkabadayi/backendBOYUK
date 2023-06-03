@@ -18,8 +18,18 @@ def registerDrug():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("INSERT INTO Drug VALUES (%s, %s, %s, %s, %s)", (name, needs_prescription, drug_class, drug_type, price))
-
     connection.commit()
+    
+    cursor.execute("SELECT * FROM HasDrug WHERE drug_name = %s", (name,))
+    existing_drug = cursor.fetchone()
+
+    if existing_drug is None:
+        cursor.execute("SELECT DISTINCT pharmacy_id FROM HasDrug")
+        pharmacy_ids = cursor.fetchall()
+        for pharmacy_id in pharmacy_ids:
+            cursor.execute("INSERT INTO HasDrug (drug_name, pharmacy_id, drug_count) VALUES (%s, %s, %s)", (name, pharmacy_id["pharmacy_id"], 0))
+            connection.commit()
+
     return jsonify({"result": "Drug added"})
 
 
