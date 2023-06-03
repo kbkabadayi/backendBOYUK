@@ -115,9 +115,9 @@ def listOrders():
 @user.route('/listPrescriptions', methods = ['POST'])
 def listPreservative():
     data = request.json
-    TCK = data["patient_TCK"]
+    patient_TCK = data["patient_TCK"]
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM Prescription WHERE patient_TCK = %s ORDER BY order_date ASC", (TCK,))
+    cursor.execute("SELECT DISTINCT drug_name, presc_id, illness, fullname, expertise_field, date FROM Prescription NATURAL JOIN (SELECT * FROM Prescribes WHERE patient_TCK = %s) as temp NATURAL JOIN Contains NATURAL JOIN Drug JOIN (Doctor NATURAL JOIN User) ON doctor_TCK = TCK;", (patient_TCK,))
     return jsonify(cursor.fetchall())
