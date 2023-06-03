@@ -197,6 +197,10 @@ CREATE VIEW CartView AS
 SELECT drug_name, company, needs_prescription, drug_count, TCK, price
 FROM Cart JOIN Drug  ON drug_name = name ;
 
+CREATE VIEW RestockView AS
+SELECT pharm_name, drug_name, restock_count, restock_date, warehouse_id
+FROM Restocks JOIN Pharmacy ON pharm_id = pharmacy_id;
+
 -- CREATE VIEW PastOrderView AS
 -- SELECT *
 -- FROM Orders o, Orders p
@@ -303,3 +307,11 @@ VALUES("xanax", 1, 5);
 INSERT INTO Cart(TCK, drug_name, drug_count, pharm_id )
 VALUES( 2121212122, "teraflu", 3,1 );
 
+INSERT INTO Restocks( pharm_id, warehouse_id , drug_name, restock_count, restock_date)
+VALUES (1, 1, "teraflu", 4, '2023-06-03 16:33:07');
+
+INSERT INTO Restocks( pharm_id, warehouse_id , drug_name, restock_count, restock_date)
+VALUES (1, 1, "paxera", 25, '2023-01-01 14:15:00');
+
+INSERT INTO Restocks( pharm_id, warehouse_id , drug_name, restock_count, restock_date)
+VALUES (1, 1, "xanax", 12, '2023-01-01 14:15:00');
