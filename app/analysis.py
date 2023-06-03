@@ -68,25 +68,29 @@ def create_money_analysis():
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
     today = datetime.date.today()
+    return jsonify(today)
     months_ago = today - datetime.timedelta(days = 30 * last_months)
     cursor.execute('SELECT drug_name, count, order_date FROM Orders WHERE patient_TCK = %s AND order_date >= %s', (patient_TCK, months_ago))
     orders = cursor.fetchall()
 
     total_spent = 0
+    if orders is not None:
+        for order in orders:
+            drug_name = order[0]['drug_name']
+            count = order[1]['count']
+            
+            cursor.execute('SELECT price FROM Drug WHERE name = %s', (drug_name,))
+            drug_price = cursor.fetchone()['price']
+            
+            total_spent += drug_price * count
 
-    for order in orders:
-        drug_name = order[0]['drug_name']
-        count = order[1]['count']
-        
-        cursor.execute('SELECT price FROM Drug WHERE name = %s', (drug_name,))
-        drug_price = cursor.fetchone()['price']
-        
-        total_spent += drug_price * count
+        average_spent = total_spent / last_months
 
-    average_spent = total_spent / last_months
+        average_spent_object = {
+            "average_spent": average_spent
+        }
 
-    average_spent_object = {
-        "average_spent": average_spent
-    }
-
-    return jsonify(average_spent_object)
+        return jsonify(average_spent_object)
+    
+    else:
+        return "No orders found"
