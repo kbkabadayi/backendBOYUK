@@ -19,15 +19,14 @@ def add():
     cursor.execute("INSERT INTO Hospital(hospital_id, name, city) VALUES (%s, %s, %s)", (hospital_id, name, city))
 
     connection.commit()
-    return hospital_data
+    return "success"
 
 @hospital.route('/delete/<int:hosp_id>', methods=['DELETE'])
 def delete(hosp_id):
-
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("DELETE FROM Hospital WHERE hospital_id = %s", (hosp_id,))
 
     connection.commit()
-    return 'successful'
+    return 'success'
 

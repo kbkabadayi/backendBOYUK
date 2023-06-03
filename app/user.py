@@ -7,7 +7,6 @@ user = Blueprint('user', __name__, url_prefix='/user')
 
 @user.route('/add', methods=['GET','POST'])
 def add():
-
     user_data = request.json
     TCK = user_data["TCK"]
     password = user_data["password"]
