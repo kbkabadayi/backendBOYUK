@@ -189,15 +189,36 @@ def filter():
 
 
 # Burayı şimdilik onur için ekliyoz sonra silcez
-@drug.route('/list', methods = ['GET'])
+@drug.route('/list', methods = ['POST'])
 def getAll():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM Drug")
+    cursor.execute("SELECT company FROM Drug")
     data = cursor.fetchall()
+    companies = []
+    for i in range(len(data)):
+        company = data[i]['company']
+        if company not in companies:
+            companies.append(company)
 
-    return jsonify(data)
+
+    cursor.execute("SELECT price FROM Drug")
+    data = cursor.fetchall()
+    priceRange = 0
+    for i in range(len(data)):
+        priceRange = max(priceRange, data[i]['price'])
+
+    cursor.execute("SELECT drug_type FROM Drug")
+    data = cursor.fetchall()
+    categories = []
+    for i in range(len(data)):
+        category = data[i]['drug_type']
+        if category not in categories:
+            categories.append(category)
+
+
+    return jsonify({"companies": companies, "range": priceRange, "categories": categories})
 
 
 

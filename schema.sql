@@ -188,10 +188,10 @@ INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
 VALUES("Arveles", "no", "Pfizer", "Pain Killer", 25);
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
-VALUES("Xanax", "yes", "Abdi İbrahim", "Anti Depressant", 100);
+VALUES("Xanax", "yes", "Abdi Ibrahim", "Anti Depressant", 100);
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
-VALUES("Paxera", "yes", "Abdi İbrahim", "Anti Depressant", 90);
+VALUES("Paxera", "yes", "Abdi Ibrahim", "Anti Depressant", 90);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
 VALUES(1, '1', 'Dr. Boran Torun', 'Bilkent University Cankaya/Ankara', 2001, 'doctor');
