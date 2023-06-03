@@ -108,7 +108,7 @@ def listOrders():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM Orders WHERE patient_TCK = %s ORDER BY order_date ASC", (TCK,))
+    cursor.execute("SELECT * FROM OrdersView WHERE patient_TCK = %s ORDER BY order_date ASC", (TCK,))
     return jsonify(cursor.fetchall())
 
 
