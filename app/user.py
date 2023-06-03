@@ -35,7 +35,7 @@ def add():
         pharmacy_id = user_data["pharmacy_id"]
         cursor.execute("INSERT INTO Pharmacist(TCK, pharmacy_id) VALUES (%s, %s)", (TCK, pharmacy_id,))
         connection.commit()
-    return user_data
+    return "successful"
 
 @user.route('/delete/<int:TCK>', methods=['DELETE'])
 def delete(TCK):

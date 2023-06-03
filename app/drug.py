@@ -18,8 +18,18 @@ def registerDrug():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("INSERT INTO Drug VALUES (%s, %s, %s, %s, %s)", (name, needs_prescription, drug_class, drug_type, price))
-
     connection.commit()
+    
+    cursor.execute("SELECT * FROM HasDrug WHERE drug_name = %s", (name,))
+    existing_drug = cursor.fetchone()
+
+    if existing_drug is None:
+        cursor.execute("SELECT DISTINCT pharmacy_id FROM HasDrug")
+        pharmacy_ids = cursor.fetchall()
+        for pharmacy_id in pharmacy_ids:
+            cursor.execute("INSERT INTO HasDrug (drug_name, pharmacy_id, drug_count) VALUES (%s, %s, %s)", (name, pharmacy_id["pharmacy_id"], 0))
+            connection.commit()
+
     return jsonify({"result": "Drug added"})
 
 
@@ -84,7 +94,7 @@ def orderDrug():
             cursor.execute("SELECT drug_name FROM Contains WHERE presc_id in (SELECT presc_id FROM Prescribes WHERE patient_TCK = %s)", (patient_TCK,))
             drugs_prescribed = cursor.fetchall()
             pompa = {"drug_name": drug_name}
-                
+
             if pompa not in drugs_prescribed:
                 return jsonify({"status": "fail", "result": "Order contains a drug patient is not prescribed"})
 
@@ -122,7 +132,7 @@ def filter():
     drug_type = data['drug_type']
     needs_prescription = data['needs_prescription']
 
-    resulting_query = "SELECT * FROM Drug "
+    resulting_query = "SELECT * FROM Drug NATURAL JOIN HasDrug "
     where_clause = []
 
     connection = get_connection()
