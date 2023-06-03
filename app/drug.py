@@ -127,12 +127,14 @@ def filter():
     data = request.json
     min_price = data['min_price']
     max_price = data['max_price']
+    drug_name = data["drug_name"]
     # side_effect = data['side_effect']
     company = data['company']
+
     drug_type = data['drug_type']
     needs_prescription = data['needs_prescription']
 
-    resulting_query = "SELECT * FROM Drug NATURAL JOIN HasDrug "
+    resulting_query = "SELECT * FROM Drug JOIN HasDrug ON drug_name = name "
     where_clause = []
 
     connection = get_connection()
@@ -167,6 +169,9 @@ def filter():
             where_clause.append( side_query)
     if drug_type != "all":
         where_clause.append(f" drug_type = '{drug_type}'")
+
+    if drug_name:
+        where_clause.append( f" name LIKE '{drug_name}%'")
 
     if len(where_clause) > 0:
         resulting_query += " WHERE "

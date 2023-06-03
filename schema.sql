@@ -9,7 +9,7 @@ CREATE TABLE Hospital (
 );
 
 CREATE TABLE User (
-    TCK INT,
+    TCK BIGINT,
     password VARCHAR(40),
     fullname VARCHAR(255),
     address VARCHAR(255),
@@ -24,7 +24,7 @@ CREATE TABLE Admin (
 );
 
 CREATE TABLE Doctor (
-    TCK INT,
+    TCK BIGINT,
     expertise_field VARCHAR(40),
     hospital_id INT,
     PRIMARY KEY (TCK),
@@ -33,7 +33,7 @@ CREATE TABLE Doctor (
 );
 
 CREATE TABLE Patient (
-    TCK INT,
+    TCK BIGINT,
     PRIMARY KEY (TCK),
     FOREIGN KEY (TCK) REFERENCES User(TCK)
 );
@@ -43,7 +43,7 @@ CREATE TABLE BankAccount (
     bank_account_password VARCHAR(40),
     active VARCHAR(40),
     balance INT,
-    patient_TCK INT,
+    patient_TCK BIGINT,
     PRIMARY KEY (bank_account_no),
     FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK)
 );
@@ -55,8 +55,8 @@ CREATE TABLE Prescription (
 );
 
 CREATE TABLE Prescribes (
-    doctor_TCK INT,
-    patient_TCK INT,
+    doctor_TCK BIGINT,
+    patient_TCK BIGINT,
     presc_id INT,
     PRIMARY KEY (doctor_TCK, patient_TCK, presc_id),
     FOREIGN KEY (doctor_TCK) REFERENCES User(TCK),
@@ -71,7 +71,7 @@ CREATE TABLE Illness (
 );
 
 CREATE TABLE HasIllness (
-    patient_TCK INT,
+    patient_TCK BIGINT,
     illness_name VARCHAR(40),
     PRIMARY KEY (patient_TCK, illness_name),
     FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK),
@@ -86,7 +86,7 @@ CREATE TABLE PharmaceuticalWarehouse (
 );
 
 CREATE TABLE PharmaceuticalWarehouseWorker (
-    TCK INT NOT NULL,
+    TCK BIGINT NOT NULL,
     warehouse_id INT,
     PRIMARY KEY (TCK),
     FOREIGN KEY (TCK) REFERENCES User(TCK),
@@ -101,7 +101,7 @@ CREATE TABLE Pharmacy (
 );
 
 CREATE TABLE Pharmacist (
-    TCK INT NOT NULL,
+    TCK BIGINT NOT NULL,
     pharmacy_id INT,
     PRIMARY KEY (TCK),
     FOREIGN KEY (TCK) REFERENCES User(TCK),
@@ -154,7 +154,7 @@ CREATE TABLE SideEffect (
 
 CREATE TABLE Orders (
     bank_account_no INT,
-    patient_TCK INT,
+    patient_TCK BIGINT,
     drug_name VARCHAR(255),
     order_date DATETIME,
     count INT,
@@ -165,7 +165,7 @@ CREATE TABLE Orders (
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 CREATE TABLE Cart (
-    TCK INT,
+    TCK BIGINT,
     drug_name VARCHAR(255),
     drug_count INT,
     pharm_id INT,
