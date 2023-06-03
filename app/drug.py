@@ -36,18 +36,20 @@ def registerDrug():
 @drug.route('/restockDrug', methods=['POST'])
 def restockDrug():
     data = request.json
-    drug_to_count = data["drug_to_count"]
+    drug_name = data['drug_name']
+    count = data['drug_count']
     pharm_id = data["pharm_id"]
     warehouse_id = data["warehouse_id"]
     restock_date = datetime.now()
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-    for drug_name, count in drug_to_count.items():
-        cursor.execute("UPDATE HasDrug SET drug_count = drug_count + %s WHERE drug_name = %s AND pharmacy_id = %s", (count, drug_name, pharm_id))
-        connection.commit()
-        cursor.execute("INSERT INTO Restocks VALUES (%s, %s, %s, %s, %s)", (pharm_id, warehouse_id, drug_name, count, restock_date))
-        connection.commit()
+    
+    cursor.execute("UPDATE HasDrug SET drug_count = drug_count + %s WHERE drug_name = %s AND pharmacy_id = %s", (count, drug_name, pharm_id))
+    connection.commit()
+    cursor.execute("INSERT INTO Restocks VALUES (%s, %s, %s, %s, %s)", (pharm_id, warehouse_id, drug_name, count, restock_date))
+    connection.commit()
+        
 
     return jsonify({"result": "Drug restocked to the pharmacy"})
 

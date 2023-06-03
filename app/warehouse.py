@@ -20,7 +20,7 @@ def add():
 
     return "Warehouse added successfully"
 
-@warehouse.route('/remove/<int:id>', methods = ['GET', 'POST'])
+@warehouse.route('/remove/<int:id>', methods = ['DELETE'])
 def remove(id):
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
