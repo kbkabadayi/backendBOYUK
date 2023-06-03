@@ -188,7 +188,7 @@ def filter():
     return json_data
 
 
-# Burayı şimdilik onur için ekliyoz sonra silcez
+# Burayı şimdilik onur için ekliyoz sonra sikcez
 @drug.route('/list', methods = ['POST'])
 def getAll():
     connection = get_connection()
@@ -230,7 +230,17 @@ def pampi():
     data = cursor.fetchall()
     return jsonify(data)
 
+@drug.route('/drugToCount', methods=['POST' ])
+def pampito():
+    data = request.json
+    pharm_id = data['pharm_id']
 
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT drug_name, drug_count FROM HasDrug WHERE pharmacy_id = %s", (pharm_id,))
+    data = cursor.fetchall()
+    return jsonify(data)
 
 
 

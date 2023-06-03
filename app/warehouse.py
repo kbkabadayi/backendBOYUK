@@ -39,3 +39,11 @@ def show():
 
     cursor.execute("SELECT * FROM RestockView WHERE warehouse_id = %s", (warehouse_id,))
     return jsonify(cursor.fetchall())
+
+@warehouse.route('/getWarehouses', methods=['GET'])
+def showarehouses():
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT warehouse_id, warehouse_name FROM PharmaceuticalWarehouse")
+    return jsonify(cursor.fetchall())
