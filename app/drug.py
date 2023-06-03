@@ -47,6 +47,8 @@ def orderDrug():
     patient_TCK = data["patient_TCK"]
     order_date = datetime.now()
 
+    
+
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
@@ -55,7 +57,6 @@ def orderDrug():
 
     cursor.execute("SELECT drug_name, drug_count FROM Cart WHERE TCK = %s", (patient_TCK,))
     drug_to_count = cursor.fetchall()
-
 
 
     totalPrice = 0
@@ -72,6 +73,7 @@ def orderDrug():
         cursor.execute("SELECT drug_count FROM HasDrug WHERE pharmacy_id = %s AND drug_name = %s", (pharm_id, drug_name))
         count_in_pharm = cursor.fetchone()['drug_count']
 
+
         if (count > count_in_pharm):
             result_text = "Not enough " + drug_name + " in pharmacy"
             return jsonify({"status": "fail", "result": result_text})
@@ -86,7 +88,6 @@ def orderDrug():
             if pompa not in drugs_prescribed:
                 return jsonify({"status": "fail", "result": "Order contains a drug patient is not prescribed"})
 
-
     # process order
     for i in range(len(drug_to_count)):
         drug_name = drug_to_count[i]['drug_name']
@@ -97,6 +98,7 @@ def orderDrug():
 
         cursor.execute('SELECT bank_account_no FROM BankAccount WHERE patient_TCK = %s AND active = "active"', (patient_TCK,))
         bank_account_no = cursor.fetchone()['bank_account_no']
+        
 
         status = "pompa"
         cursor.execute("INSERT INTO Orders VALUES (%s, %s, %s, %s, %s, %s)", (bank_account_no, patient_TCK, drug_name, order_date, count, status))

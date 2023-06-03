@@ -280,7 +280,19 @@ INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
 VALUES("teraflu", 1, 10);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("aferin", 1, 12);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
 VALUES("paxera", 1, 5);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("arveles", 1, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("nurofen", 1, 5);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("xanax", 1, 5);
 
 INSERT INTO Cart(TCK, drug_name, drug_count, pharm_id )
 VALUES( 2121212122, "teraflu", 3,1 );
