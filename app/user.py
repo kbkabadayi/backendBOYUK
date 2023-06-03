@@ -119,5 +119,5 @@ def listPreservative():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT DISTINCT drug_name, presc_id, illness, fullname, expertise_field, date FROM Prescription NATURAL JOIN (SELECT * FROM Prescribes WHERE patient_TCK = %s) as temp NATURAL JOIN Contains NATURAL JOIN Drug JOIN (Doctor NATURAL JOIN User) ON doctor_TCK = TCK;", (patient_TCK,))
+    cursor.execute("SELECT DISTINCT drug_name, presc_id, illness, fullname, expertise_field, date FROM Prescription NATURAL JOIN (SELECT * FROM Prescribes WHERE patient_TCK = %s) as temp NATURAL JOIN Contains NATURAL JOIN Drug JOIN (Doctor NATURAL JOIN User) ON doctor_TCK = TCK ORDER BY date ASC", (patient_TCK,))
     return jsonify(cursor.fetchall())

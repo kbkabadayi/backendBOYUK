@@ -230,10 +230,10 @@ INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
 VALUES("paxera", "yes", "depression sirketi", "drug type", 90);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212121, 'passwordDoctor', 'Big Dick', 'Bilkent university cankaya/ankara', 2001, 'doctor');
+VALUES(32, '32', 'Big Dick', 'Bilkent university cankaya/ankara', 2001, 'doctor');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212122, 'passwordPatient', 'Big Patient', 'maltepe university cankaya/ankara', 2002, 'patient');
+VALUES(31, '31', 'Big Patient', 'maltepe university cankaya/ankara', 2002, 'patient');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
 VALUES(2121212123, 'passwordPharmacist', 'benim adim eczaci', 'eczaci adres', 1985, 'pharmacist');
@@ -251,13 +251,13 @@ INSERT INTO Hospital(hospital_id, name, city)
 VALUES(1, 'Basibuyuk Hastanesi', 'Adana');
 
 INSERT INTO Doctor(TCK, expertise_field, hospital_id)
-VALUES(2121212121, 'dick science', 1);
+VALUES(32, 'dick science', 1);
 
 INSERT INTO Patient(TCK)
-VALUES(2121212122);
+VALUES(31);
 
 INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance, patient_TCK)
-VALUES(3131, 'banka password', 'active', 1000, 2121212122);
+VALUES(3131, 'banka password', 'active', 1000, 31);
 
 INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
 VALUES(1, 'Faruk Eczanesi', 'pompa city');
@@ -275,7 +275,7 @@ INSERT INTO Illness(illness_name, type)
 VALUES('Flu', 'not killing');
 
 INSERT INTO HasIllness(patient_TCK, illness_name)
-VALUES(2121212122, 'Flu');
+VALUES(31, 'Flu');
 
 INSERT INTO Prescription( date, illness)
 VALUES( '2023-03-14 09:00:00', "dig bick");
@@ -284,7 +284,7 @@ INSERT INTO Contains(presc_id, drug_name)
 VALUES(1, "paxera");
 
 INSERT INTO Prescribes(presc_id, doctor_TCK, patient_TCK)
-VALUES(1, 2121212121, 2121212122);
+VALUES(1, 32, 31);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
 VALUES("teraflu", 1, 10);
@@ -305,7 +305,7 @@ INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
 VALUES("xanax", 1, 5);
 
 INSERT INTO Cart(TCK, drug_name, drug_count, pharm_id )
-VALUES( 2121212122, "teraflu", 3,1 );
+VALUES( 31, "teraflu", 3,1 );
 
 INSERT INTO Restocks( pharm_id, warehouse_id , drug_name, restock_count, restock_date)
 VALUES (1, 1, "teraflu", 4, '2023-06-03 16:33:07');
