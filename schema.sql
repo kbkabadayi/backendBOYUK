@@ -212,22 +212,22 @@ FROM Orders O
 JOIN Drug D ON O.drug_name = D.name;
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
-VALUES("teraflu", "no", "abc", "flu", 56);
+VALUES("Theraflu", "no", "GSK", "Flu", 56);
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
-VALUES("aferin", "no", "abc", "drug type", 15);
+VALUES("Aferin", "no", "Forte", "Flu", 15);
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
-VALUES("nurofen", "no", "pompake", "drug type", 20);
+VALUES("Nurofen", "no", "Benckiser's", "Pain Killer", 20);
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
-VALUES("arveles", "no", "amciksirketi", "drug type", 25);
+VALUES("Arveles", "no", "Pfizer", "Pain Killer", 25);
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
-VALUES("xanax", "yes", "psikolojik sirketi", "drug type", 100);
+VALUES("Xanax", "yes", "Abdi İbrahim", "Anti Depressant", 100);
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
-VALUES("paxera", "yes", "depression sirketi", "drug type", 90);
+VALUES("Paxera", "yes", "Abdi İbrahim", "Anti Depressant", 90);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
 VALUES(32, '32', 'Big Dick', 'Bilkent university cankaya/ankara', 2001, 'doctor');
