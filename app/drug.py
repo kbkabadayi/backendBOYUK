@@ -82,7 +82,7 @@ def orderDrug():
             cursor.execute("SELECT drug_name FROM Contains WHERE presc_id in (SELECT presc_id FROM Prescribes WHERE patient_TCK = %s)", (patient_TCK,))
             drugs_prescribed = cursor.fetchall()
             pompa = {"drug_name": drug_name}
-                
+
             if pompa not in drugs_prescribed:
                 return jsonify({"status": "fail", "result": "Order contains a drug patient is not prescribed"})
 
@@ -120,7 +120,7 @@ def filter():
     drug_type = data['drug_type']
     needs_prescription = data['needs_prescription']
 
-    resulting_query = "SELECT * FROM Drug "
+    resulting_query = "SELECT * FROM Drug NATURAL JOIN HasDrug "
     where_clause = []
 
     connection = get_connection()
