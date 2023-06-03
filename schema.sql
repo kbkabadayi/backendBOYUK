@@ -297,3 +297,4 @@ VALUES("xanax", 1, 5);
 
 INSERT INTO Cart(TCK, drug_name, drug_count, pharm_id )
 VALUES( 2121212122, "teraflu", 3,1 );
+
