@@ -65,20 +65,6 @@ CREATE TABLE Prescribes (
     FOREIGN KEY (presc_id) REFERENCES Prescription(presc_id)
 );
 
-CREATE TABLE Illness (
-    illness_name VARCHAR(40),
-    type VARCHAR(40),
-    PRIMARY KEY (illness_name)
-);
-
-CREATE TABLE HasIllness (
-    patient_TCK BIGINT,
-    illness_name VARCHAR(40),
-    PRIMARY KEY (patient_TCK, illness_name),
-    FOREIGN KEY (patient_TCK) REFERENCES Patient(TCK),
-    FOREIGN KEY (illness_name) REFERENCES Illness(illness_name)
-);
-
 CREATE TABLE PharmaceuticalWarehouse (
     warehouse_id INT NOT NULL,
     warehouse_name VARCHAR(40),
@@ -146,13 +132,6 @@ CREATE TABLE SideEffect (
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 
--- CREATE TABLE Dosage (
---     age_group VARCHAR(255) NOT NULL,
---     no_per_day INT NOT NULL,
---     dosage_per_use INT NOT NULL,
---     PRIMARY KEY (age_group, no_per_day, dosage_per_use)
--- );
-
 CREATE TABLE Orders (
     bank_account_no INT,
     patient_TCK BIGINT,
@@ -183,16 +162,6 @@ CREATE TABLE Contains (
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );
 
-
--- CREATE TABLE HasDosage (
---     drug_name varchar(255) NOT NULL,
---     age_group VARCHAR(255) NOT NULL,
---     no_per_day INT NOT NULL,
---     dosage_per_use INT NOT NULL,
---     PRIMARY KEY (drug_name, age_group, no_per_day, dosage_per_use),
---     FOREIGN KEY (age_group, no_per_day, dosage_per_use) REFERENCES Dosage(age_group, no_per_day, dosage_per_use),
---     FOREIGN KEY (drug_name) REFERENCES Drug(name)
--- );
 CREATE VIEW CartView AS
 SELECT drug_name, company, needs_prescription, drug_count, TCK, price
 FROM Cart JOIN Drug  ON drug_name = name ;
@@ -200,11 +169,6 @@ FROM Cart JOIN Drug  ON drug_name = name ;
 CREATE VIEW RestockView AS
 SELECT pharm_name, drug_name, restock_count, restock_date, warehouse_id
 FROM Restocks JOIN Pharmacy ON pharm_id = pharmacy_id;
-
--- CREATE VIEW PastOrderView AS
--- SELECT *
--- FROM Orders o, Orders p
--- WHERE o.patient_TCK = p.patient_TCK AND o.bank_account_no = p.bank_account_no AND o.order_date = p.order_date AND o.drug_name <> p.drug_name;
 
 CREATE VIEW OrdersView AS
 SELECT O.bank_account_no, O.patient_TCK, O.drug_name, O.order_date, O.count, D.price * O.count AS total_price
@@ -230,88 +194,85 @@ INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
 VALUES("Paxera", "yes", "Abdi İbrahim", "Anti Depressant", 90);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(32, '32', 'Big Dick', 'Bilkent university cankaya/ankara', 2001, 'doctor');
+VALUES(1, '1', 'Dr. Boran Torun', 'Bilkent University Cankaya/Ankara', 2001, 'doctor');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(15, '31', 'Big Patient', 'maltepe university cankaya/ankara', 2002, 'patient');
+VALUES(2, '2', 'Kaan Berk Kabadayi', 'Bilkent Universitesi, 82. yurt', 2002, 'patient');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212123, 'passwordPharmacist', 'benim adim eczaci', 'eczaci adres', 1985, 'pharmacist');
+VALUES(3, '3', 'Ozgur Ulusoy', 'Bilkent Universitesi, EA Binasi', 2002, 'patient');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212124, 'passwordWorker', 'benim isim Pharmaceutical Warehouse', 'worker adresi', 1903, 'pharmaceuticalwarehouseworker');
+VALUES(4, '4', 'Yarkin Sakinci', 'Bilkent Universitesi, 82. yurt', 2002, 'patient');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(2121212125, 'password admin', 'benim isim admin', 'admin adresi', 1905, 'admin');
+VALUES(11, '11', 'Mehmet Onur Uysal', 'Universiteler Mahallesi, No: 26, Cankaya/Ankara', 1985, 'pharmacist');
+
+INSERT INTO User(TCK, password, fullname, address, birth_year, role)
+VALUES(31, '31', 'Ugur Can Altun', 'worker adresi', 1903, 'pharmaceuticalwarehouseworker');
+
+INSERT INTO User(TCK, password, fullname, address, birth_year, role)
+VALUES(0, '0', 'admin', 'admin', 1905, 'admin');
 
 INSERT INTO Admin(admin_id)
-VALUES(1);
+VALUES(0);
 
 INSERT INTO Hospital(hospital_id, name, city)
-VALUES(1, 'Basibuyuk Hastanesi', 'Adana');
+VALUES(1, 'Bilkent Sehir Hastanesi', 'Adana');
 
 INSERT INTO Doctor(TCK, expertise_field, hospital_id)
-VALUES(32, 'dick science', 1);
+VALUES(1, 'Urology', 1);
 
 INSERT INTO Patient(TCK)
-VALUES(15);
+VALUES(2);
+
+INSERT INTO Patient(TCK)
+VALUES(3);
+
+INSERT INTO Patient(TCK)
+VALUES(4);
 
 INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance, patient_TCK)
-VALUES(1234, 'banka password', 'active', 1000, 15);
+VALUES(1, 'banka password', 'active', 1000, 2);
 
 INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
-VALUES(1, 'Faruk Eczanesi', 'pompa city');
+VALUES(1, 'Faruk Eczanesi', 'Istanbul');
 
 INSERT INTO Pharmacist(TCK, pharmacy_id)
-VALUES(2121212123, 1);
+VALUES(11, 1);
 
 INSERT INTO PharmaceuticalWarehouse(warehouse_id, warehouse_name, warehouse_city)
 VALUES(1, 'Bizim Depo', 'Ankara');
 
 INSERT INTO PharmaceuticalWarehouseWorker(TCK, warehouse_id)
-VALUES(2121212124, 1);
-
-INSERT INTO Illness(illness_name, type)
-VALUES('Flu', 'not killing');
-
-INSERT INTO HasIllness(patient_TCK, illness_name)
-VALUES(15, 'Flu');
+VALUES(31, 1);
 
 INSERT INTO Prescription( date, illness)
-VALUES( '2023-03-14 09:00:00', "dig bick");
+VALUES( '2023-03-14 09:00:00', "Covid-19");
 
 INSERT INTO Contains(presc_id, drug_name)
-VALUES(1, "paxera");
+VALUES(1, "Paxera");
 
 INSERT INTO Prescribes(presc_id, doctor_TCK, patient_TCK)
-VALUES(1, 32, 15);
+VALUES(1, 1, 2);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("teraflu", 1, 10);
+VALUES("Theraflu", 1, 10);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("aferin", 1, 12);
+VALUES("Aferin", 1, 12);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("paxera", 1, 5);
+VALUES("Paxera", 1, 5);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("arveles", 1, 0);
+VALUES("Arveles", 1, 0);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("nurofen", 1, 5);
+VALUES("Nurofen", 1, 5);
 
 INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("xanax", 1, 5);
-
-INSERT INTO Cart(TCK, drug_name, drug_count, pharm_id )
-VALUES( 15, "teraflu", 3,1 );
+VALUES("Xanax", 1, 5);
 
 INSERT INTO Restocks( pharm_id, warehouse_id , drug_name, restock_count, restock_date)
-VALUES (1, 1, "teraflu", 4, '2023-06-03 16:33:07');
-
-INSERT INTO Restocks( pharm_id, warehouse_id , drug_name, restock_count, restock_date)
-VALUES (1, 1, "paxera", 25, '2023-01-01 14:15:00');
-
-INSERT INTO Restocks( pharm_id, warehouse_id , drug_name, restock_count, restock_date)
-VALUES (1, 1, "xanax", 12, '2023-01-01 14:15:00');
+VALUES (1, 1, "Paxera", 25, '2023-01-01 14:15:00');
