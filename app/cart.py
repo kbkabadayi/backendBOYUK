@@ -46,7 +46,7 @@ def decrement():
     return jsonify({"result": "Drug decremented from cart"})
 
 
-@cart.route('/show', methods = ['GET'])
+@cart.route('/show', methods = ['POST'])
 def show():
     data = request.json
     TCK = data["patient_TCK"]
