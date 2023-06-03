@@ -203,7 +203,7 @@ FROM Cart JOIN Drug  ON drug_name = name ;
 -- WHERE o.patient_TCK = p.patient_TCK AND o.bank_account_no = p.bank_account_no AND o.order_date = p.order_date AND o.drug_name <> p.drug_name;
 
 CREATE VIEW OrdersView AS
-SELECT O.bank_account_no, O.patient_TCK, O.drug_name, O.order_date, O.count, D.price * O.count AS cost
+SELECT O.bank_account_no, O.patient_TCK, O.drug_name, O.order_date, O.count, D.price * O.count AS total_price
 FROM Orders O
 JOIN Drug D ON O.drug_name = D.name;
 
