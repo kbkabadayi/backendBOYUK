@@ -34,7 +34,7 @@ db.register_blueprint(analysis)
 @db.route('/data', methods=['GET'])
 def get_time():
     x = datetime.datetime.now()
-    response = {'Name': "pompa",
+    response = {'Name': "pharmhub",
                               "Age": "22",
                               "Date": x,
                               "programming": "sucks ass"}

@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS pompa;
-USE pompa;
+CREATE DATABASE IF NOT EXISTS pharmhub;
+USE pharmhub;
 
 CREATE TABLE Hospital (
     hospital_id INT,
@@ -174,6 +174,8 @@ SELECT O.bank_account_no, O.patient_TCK, O.drug_name, O.order_date, O.count, D.p
 FROM Orders O
 JOIN Drug D ON O.drug_name = D.name;
 
+DELIMITER //
+
 CREATE TRIGGER DrugInsertTrigger
 AFTER INSERT ON Drug
 FOR EACH ROW
@@ -183,33 +185,29 @@ BEGIN
         SELECT NEW.name, pharmacy_id, 0
         FROM (SELECT DISTINCT pharmacy_id FROM HasDrug) AS pharmacy_ids;
     END IF;
-END;
+END //
 
+DELIMITER ;
+
+DELIMITER //
 
 CREATE TRIGGER PharmacyInsertTrigger
 AFTER INSERT ON Pharmacy
 FOR EACH ROW
 BEGIN
-    DECLARE drug_name VARCHAR(255);
-    DECLARE done INT DEFAULT FALSE;
-    DECLARE cur CURSOR FOR SELECT name FROM Drug;
+    CREATE TEMPORARY TABLE IF NOT EXISTS tmp_drug_names (name VARCHAR(255));
+    
+    INSERT INTO tmp_drug_names (name)
+    SELECT name FROM Drug;
     
     INSERT INTO HasDrug (drug_name, pharmacy_id, drug_count)
     SELECT name, NEW.pharmacy_id, 0
-    FROM Drug;
+    FROM tmp_drug_names;
     
-    OPEN cur;
-    read_loop: LOOP
-        FETCH cur INTO drug_name;
-        IF done THEN
-            LEAVE read_loop;
-        END IF;
-        
-        INSERT INTO HasDrug (drug_name, pharmacy_id, drug_count)
-        VALUES (drug_name, NEW.pharmacy_id, 0);
-    END LOOP;
-    CLOSE cur;
-END;
+    DROP TEMPORARY TABLE IF EXISTS tmp_drug_names;
+END //
+
+DELIMITER ;
 
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
 VALUES("Theraflu", "no", "GSK", "Flu", 56);
@@ -230,7 +228,7 @@ INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
 VALUES("Paxera", "yes", "Abdi Ibrahim", "Anti Depressant", 90);
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
-VALUES(1, '1', 'Dr. Boran Torun', 'Bilkent University Cankaya/Ankara', 2001, 'doctor');
+VALUES(1, '1', 'Boran Torun', 'Bilkent University Cankaya/Ankara', 2001, 'doctor');
 
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
 VALUES(2, '2', 'Kaan Berk Kabadayi', 'Bilkent Universitesi, 82. yurt', 2002, 'patient');
@@ -292,23 +290,23 @@ VALUES(1, "Paxera");
 INSERT INTO Prescribes(presc_id, doctor_TCK, patient_TCK)
 VALUES(1, 1, 2);
 
-INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("Theraflu", 1, 10);
+-- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+-- VALUES("Theraflu", 1, 10);
 
-INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("Aferin", 1, 12);
+-- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+-- VALUES("Aferin", 1, 12);
 
-INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("Paxera", 1, 5);
+-- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+-- VALUES("Paxera", 1, 5);
 
-INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("Arveles", 1, 0);
+-- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+-- VALUES("Arveles", 1, 0);
 
-INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("Nurofen", 1, 5);
+-- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+-- VALUES("Nurofen", 1, 5);
 
-INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
-VALUES("Xanax", 1, 5);
+-- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+-- VALUES("Xanax", 1, 5);
 
 INSERT INTO Restocks( pharm_id, warehouse_id , drug_name, restock_count, restock_date)
 VALUES (1, 1, "Paxera", 25, '2023-01-01 14:15:00');

@@ -6,7 +6,7 @@ db.secret_key = 'abcdefgh'
 db.config['MYSQL_HOST'] = 'db'
 db.config['MYSQL_USER'] = 'root'
 db.config['MYSQL_PASSWORD'] = 'password'
-db.config['MYSQL_DB'] = 'pompa'
+db.config['MYSQL_DB'] = 'pharmhub'
 
 mysql = MySQL(db)
 
