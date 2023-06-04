@@ -174,6 +174,43 @@ SELECT O.bank_account_no, O.patient_TCK, O.drug_name, O.order_date, O.count, D.p
 FROM Orders O
 JOIN Drug D ON O.drug_name = D.name;
 
+CREATE TRIGGER DrugInsertTrigger
+AFTER INSERT ON Drug
+FOR EACH ROW
+BEGIN
+    IF NEW.name NOT IN (SELECT drug_name FROM HasDrug) THEN
+        INSERT INTO HasDrug (drug_name, pharmacy_id, drug_count)
+        SELECT NEW.name, pharmacy_id, 0
+        FROM (SELECT DISTINCT pharmacy_id FROM HasDrug) AS pharmacy_ids;
+    END IF;
+END;
+
+
+CREATE TRIGGER PharmacyInsertTrigger
+AFTER INSERT ON Pharmacy
+FOR EACH ROW
+BEGIN
+    DECLARE drug_name VARCHAR(255);
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT name FROM Drug;
+    
+    INSERT INTO HasDrug (drug_name, pharmacy_id, drug_count)
+    SELECT name, NEW.pharmacy_id, 0
+    FROM Drug;
+    
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO drug_name;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        INSERT INTO HasDrug (drug_name, pharmacy_id, drug_count)
+        VALUES (drug_name, NEW.pharmacy_id, 0);
+    END LOOP;
+    CLOSE cur;
+END;
+
 INSERT INTO Drug(name, needs_prescription, company, drug_type, price)
 VALUES("Theraflu", "no", "GSK", "Flu", 56);
 
