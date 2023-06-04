@@ -15,8 +15,16 @@ def add():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city) VALUES (%s, %s, %s)", (pharm_id, pharm_name, pharm_city))
-
     connection.commit()
+    
+    cursor.execute("SELECT name FROM Drug")
+    drug_names = cursor.fetchall()
+
+    for i in range(len(drug_names)):
+        drug = drug_names[i]['name']
+        cursor.execute("INSERT INTO HasDrug VALUES ( %s, %s, 0 )", (drug, pharm_id))
+        connection.commit()
+
     return "success"
 
 @pharmacy.route('/list', methods = ['POST'])
