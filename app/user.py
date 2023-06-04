@@ -71,7 +71,16 @@ def info():
     cursor.execute("SELECT * FROM User WHERE TCK = %s", (TCK, ))
 
     user_info = cursor.fetchone()
-    return jsonify(user_info)
+    role = user_info['role']
+    if role == "pharmacist":
+        cursor.execute("SELECT * FROM User NATURAL JOIN Pharmacist WHERE TCK = %s",(TCK,))
+        return jsonify(cursor.fetchone())
+    if role == "doctor":
+        cursor.execute("SELECT * FROM User NATURAL JOIN Doctor WHERE TCK = %s",(TCK,))
+        return jsonify(cursor.fetchone())
+    if role == "pharmaceuticalwarehouseworker":
+        cursor.execute("SELECT * FROM User NATURAL JOIN PharmaceuticalWarehouseWorker WHERE TCK = %s",(TCK,))
+        return jsonify(cursor.fetchone())
 
 @user.route('/login', methods = ['GET', 'POST'])
 def login():
