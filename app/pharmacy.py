@@ -35,3 +35,11 @@ def listall():
     cursor.execute( "SELECT pharm_name, pharm_city FROM Pharmacy")
     pharm_data = cursor.fetchall()
     return jsonify(pharm_data)
+
+@pharmacy.route('/all', methods = ['GET', 'POST'])
+def listAllUsers():
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * From Pharmacy")    
+    return jsonify(cursor.fetchall())
