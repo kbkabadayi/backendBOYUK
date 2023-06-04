@@ -39,6 +39,21 @@ def listAll():
 def remove(id):
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * FROM Pharmacist WHERE pharmacy_id = %s", (id,))
+    pharmacists = cursor.fetchall()
+
+    cursor.execute("DELETE FROM Pharmacist WHERE pharmacy_id = %s", (id,))
+    connection.commit()
+
+    if len(pharmacists) > 0:
+        for i in range(len(pharmacists)):
+            pharmacist_id = pharmacists[i]['TCK']
+            cursor.execute("DELETE FROM User WHERE TCK = %s", (pharmacist_id,))
+            connection.commit()
+
+    cursor.execute("DELETE FROM HasDrug WHERE pharmacy_id = %s", (id,))
+    connection.commit()
     cursor.execute("DELETE FROM Pharmacy WHERE pharmacy_id = %s", [id])
     connection.commit()
 

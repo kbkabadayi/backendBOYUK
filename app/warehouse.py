@@ -24,6 +24,19 @@ def add():
 def remove(id):
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * FROM PharmaceuticalWarehouseWorker WHERE warehouse_id = %s", [id])
+    warehouse_workers = cursor.fetchall()
+
+    cursor.execute("DELETE FROM PharmaceuticalWarehouseWorker WHERE warehouse_id = %s", [id])
+    connection.commit()
+
+    if len(warehouse_workers) > 0:
+        for i in range(len(warehouse_workers)):
+            worker_id = warehouse_workers[i]['TCK']
+            cursor.execute("DELETE FROM User WHERE TCK = %s", (worker_id,))
+            connection.commit()
+
     cursor.execute("DELETE FROM PharmaceuticalWarehouse WHERE warehouse_id = %s", [id])
 
     connection.commit()
