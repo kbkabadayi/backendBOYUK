@@ -19,7 +19,7 @@ def registerDrug():
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("INSERT INTO Drug VALUES (%s, %s, %s, %s, %s)", (name, needs_prescription, drug_class, drug_type, price))
     connection.commit()
-    
+
     cursor.execute("SELECT * FROM HasDrug WHERE drug_name = %s", (name,))
     existing_drug = cursor.fetchone()
 
@@ -44,12 +44,12 @@ def restockDrug():
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-    
+
     cursor.execute("UPDATE HasDrug SET drug_count = drug_count + %s WHERE drug_name = %s AND pharmacy_id = %s", (count, drug_name, pharm_id))
     connection.commit()
     cursor.execute("INSERT INTO Restocks VALUES (%s, %s, %s, %s, %s)", (pharm_id, warehouse_id, drug_name, count, restock_date))
     connection.commit()
-        
+
 
     return jsonify({"result": "Drug restocked to the pharmacy"})
 
@@ -57,15 +57,14 @@ def restockDrug():
 def orderDrug():
     data = request.json
     patient_TCK = data["patient_TCK"]
+    pharm_id = data["pharm_id"]
     order_date = datetime.now()
 
-    
+
 
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT pharm_id FROM Cart WHERE TCK = %s", (patient_TCK,))
-    pharm_id = cursor.fetchone()['pharm_id']
 
     cursor.execute("SELECT drug_name, drug_count FROM Cart WHERE TCK = %s", (patient_TCK,))
     drug_to_count = cursor.fetchall()
@@ -110,14 +109,14 @@ def orderDrug():
 
         cursor.execute('SELECT bank_account_no FROM BankAccount WHERE patient_TCK = %s AND active = "active"', (patient_TCK,))
         bank_account_no = cursor.fetchone()['bank_account_no']
-        
+
         cursor.execute("SELECT price FROM Drug where name = %s", (drug_name,))
         price = cursor.fetchone()['price']
 
         cursor.execute("INSERT INTO Orders VALUES (%s, %s, %s, %s, %s, %s)", (bank_account_no, patient_TCK, drug_name, order_date, count, price * count))
         connection.commit()
 
-        cursor.execute("DELETE FROM Cart WHERE TCK = %s AND pharm_id = %s", (patient_TCK, pharm_id))
+        cursor.execute("DELETE FROM Cart WHERE TCK = %s", (patient_TCK,))
         connection.commit()
 
 

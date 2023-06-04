@@ -148,8 +148,7 @@ CREATE TABLE Cart (
     TCK BIGINT,
     drug_name VARCHAR(255),
     drug_count INT,
-    pharm_id INT,
-    PRIMARY KEY (TCK, drug_name, pharm_id),
+    PRIMARY KEY (TCK, drug_name),
     FOREIGN KEY (TCK) REFERENCES Patient(TCK),
     FOREIGN KEY (drug_name) REFERENCES Drug(name)
 );

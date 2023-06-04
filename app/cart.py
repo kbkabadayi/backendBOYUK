@@ -10,14 +10,13 @@ def pay():
     cart_data = request.json
     patient_TCK = cart_data["patient_TCK"]
     drug_name = cart_data["drug_name"]
-    pharm_id = cart_data["pharm_id"]
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("SELECT * FROM Cart WHERE TCK = %s AND drug_name = %s", (patient_TCK, drug_name))
     exist = cursor.fetchone()
 
     if exist is None:
-        cursor.execute("INSERT INTO Cart VALUES (%s, %s, 1, %s)", (patient_TCK, drug_name, pharm_id))
+        cursor.execute("INSERT INTO Cart VALUES (%s, %s, 1)", (patient_TCK, drug_name))
         connection.commit()
     else:
         cursor.execute("UPDATE Cart SET drug_count = drug_count + 1 WHERE TCK = %s AND drug_name = %s", ( patient_TCK,drug_name))
@@ -29,18 +28,17 @@ def decrement():
     cart_data = request.json
     patient_TCK = cart_data["patient_TCK"]
     drug_name = cart_data["drug_name"]
-    pharm_id = cart_data["pharm_id"]
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute("SELECT * FROM Cart WHERE TCK = %s AND drug_name = %s AND pharm_id = %s", (patient_TCK, drug_name, pharm_id))
+    cursor.execute("SELECT * FROM Cart WHERE TCK = %s AND drug_name = %s", (patient_TCK, drug_name ))
     exist = cursor.fetchone()
 
     if exist["drug_count"] == 1:
-        cursor.execute("DELETE FROM Cart WHERE TCK = %s AND drug_name = %s AND pharm_id = %s", (patient_TCK,drug_name, pharm_id))
+        cursor.execute("DELETE FROM Cart WHERE TCK = %s AND drug_name = %s", (patient_TCK,drug_name))
         connection.commit()
 
     else:
-        cursor.execute("UPDATE Cart SET drug_count = drug_count - 1 WHERE TCK = %s AND drug_name = %s AND pharm_id = %s", ( patient_TCK,drug_name, pharm_id))
+        cursor.execute("UPDATE Cart SET drug_count = drug_count - 1 WHERE TCK = %s AND drug_name = %s", ( patient_TCK,drug_name))
         connection.commit()
 
     return jsonify({"result": "Drug decremented from cart"})

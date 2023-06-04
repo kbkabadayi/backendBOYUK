@@ -19,6 +19,14 @@ def add():
     connection.commit()
     return "success"
 
+@pharmacy.route('/list', methods = ['POST'])
+def listAll():
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM Pharmacy")
+    pharm_data = cursor.fetchall()
+    return jsonify(pharm_data)
+
 @pharmacy.route('/remove/<int:id>', methods = ['GET', 'POST', 'DELETE'])
 def remove(id):
     connection = get_connection()
