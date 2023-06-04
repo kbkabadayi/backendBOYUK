@@ -43,17 +43,8 @@ def remove(id):
     cursor.execute("SELECT * FROM Pharmacist WHERE pharmacy_id = %s", (id,))
     pharmacists = cursor.fetchall()
 
-    cursor.execute("DELETE FROM Pharmacist WHERE pharmacy_id = %s", (id,))
-    connection.commit()
-
     if len(pharmacists) > 0:
-        for i in range(len(pharmacists)):
-            pharmacist_id = pharmacists[i]['TCK']
-            cursor.execute("DELETE FROM User WHERE TCK = %s", (pharmacist_id,))
-            connection.commit()
-    else:
         return "First you have to remove the pharmacists for this pharmacy"
-    
 
     cursor.execute("DELETE FROM HasDrug WHERE pharmacy_id = %s", (id,))
     connection.commit()
