@@ -32,3 +32,15 @@ def prescribe():
     connection.commit()
 
     return jsonify("success")
+
+
+@prescription.route('/listPrescriptions', methods = ['GET', 'POST'])
+def pampito():
+    data = request.json
+    doctor_TCK = data['doctor_TCK']
+
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+    
+    cursor.execute("SELECT * FROM Prescription NATURAL JOIN Prescribes NATURAL JOIN Contains WHERE doctor_TCK = %s ", (doctor_TCK,))
+    return jsonify(cursor.fetchall())
