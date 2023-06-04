@@ -130,3 +130,11 @@ def listPatient():
     cursor.execute("SELECT fullname, TCK FROM Patient NATURAL JOIN User")
     return jsonify(cursor.fetchall())
 
+@user.route('/all', methods = ['GET', 'POST'])
+def listAllUsers():
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * From User")    
+    return jsonify(cursor.fetchall())
+

@@ -30,3 +30,11 @@ def delete(hosp_id):
     connection.commit()
     return 'success'
 
+@hospital.route('/all', methods = ['GET', 'POST'])
+def listAllUsers():
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * From Hospital")    
+    return jsonify(cursor.fetchall())
+

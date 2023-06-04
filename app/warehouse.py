@@ -47,3 +47,11 @@ def showarehouses():
 
     cursor.execute("SELECT warehouse_id, warehouse_name FROM PharmaceuticalWarehouse")
     return jsonify(cursor.fetchall())
+
+@warehouse.route('/all', methods = ['GET', 'POST'])
+def listAllUsers():
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * From PharmaceuticalWarehouse")    
+    return jsonify(cursor.fetchall())
