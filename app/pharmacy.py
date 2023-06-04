@@ -51,6 +51,9 @@ def remove(id):
             pharmacist_id = pharmacists[i]['TCK']
             cursor.execute("DELETE FROM User WHERE TCK = %s", (pharmacist_id,))
             connection.commit()
+    else:
+        return "First you have to remove the pharmacists for this pharmacy"
+    
 
     cursor.execute("DELETE FROM HasDrug WHERE pharmacy_id = %s", (id,))
     connection.commit()

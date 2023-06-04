@@ -36,6 +36,8 @@ def remove(id):
             worker_id = warehouse_workers[i]['TCK']
             cursor.execute("DELETE FROM User WHERE TCK = %s", (worker_id,))
             connection.commit()
+    else:
+        return "First you have to remove the workers for this warehouse"
 
     cursor.execute("DELETE FROM PharmaceuticalWarehouse WHERE warehouse_id = %s", [id])
 

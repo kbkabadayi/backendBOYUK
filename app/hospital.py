@@ -37,6 +37,8 @@ def delete(hosp_id):
             doctors_TCK = doctors[i]['TCK']
             cursor.execute("DELETE FROM User WHERE TCK = %s", (doctors_TCK,))
             connection.commit()
+    else:
+        return "First you have to remove the doctors for this hospital"
 
     cursor.execute("DELETE FROM Hospital WHERE hospital_id = %s", (hosp_id,))
     connection.commit()
