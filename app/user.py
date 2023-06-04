@@ -44,7 +44,7 @@ def delete(TCK):
     cursor.execute("SELECT role FROM User WHERE TCK = %s", (TCK, ))
     role = cursor.fetchone()['role']
 
-    
+
     if role.lower() == "doctor":
         cursor.execute("DELETE FROM Doctor WHERE TCK = %s", (TCK,))
         connection.commit()
@@ -81,6 +81,7 @@ def info():
     if role == "pharmaceuticalwarehouseworker":
         cursor.execute("SELECT * FROM User NATURAL JOIN PharmaceuticalWarehouseWorker WHERE TCK = %s",(TCK,))
         return jsonify(cursor.fetchone())
+    return jsonify(user_info)
 
 @user.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -144,6 +145,6 @@ def listAllUsers():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * From User")    
+    cursor.execute("SELECT * From User")
     return jsonify(cursor.fetchall())
 
