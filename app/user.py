@@ -42,10 +42,9 @@ def delete(TCK):
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("SELECT role FROM User WHERE TCK = %s", (TCK, ))
-    role = cursor.fetchone()
+    role = cursor.fetchone()['role']
 
-    cursor.execute("DELETE FROM User WHERE TCK = %s", (TCK,))
-    connection.commit()
+    
     if role.lower() == "doctor":
         cursor.execute("DELETE FROM Doctor WHERE TCK = %s", (TCK,))
         connection.commit()
@@ -58,8 +57,10 @@ def delete(TCK):
     elif role.lower() == "pharmacist":
         cursor.execute("DELETE FROM Pharmacist WHERE TCK = %s", (TCK,))
         connection.commit()
+    cursor.execute("DELETE FROM User WHERE TCK = %s", (TCK,))
+    connection.commit()
 
-    return 'successful'
+    return 'success'
 
 @user.route('/info', methods=['POST'])
 def info():
