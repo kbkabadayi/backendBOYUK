@@ -136,7 +136,7 @@ def filter():
     drug_type = data['drug_type']
     needs_prescription = data['needs_prescription']
 
-    resulting_query = "SELECT * FROM Drug JOIN HasDrug ON drug_name = name "
+    resulting_query = "SELECT * FROM Drug "
     where_clause = []
 
     connection = get_connection()
@@ -189,7 +189,7 @@ def filter():
     return json_data
 
 
-# Burayı şimdilik onur için ekliyoz sonra sikcez
+# Burayı şimdilik onur için ekliyoz sonra silcez
 @drug.route('/list', methods = ['POST'])
 def getAll():
     connection = get_connection()

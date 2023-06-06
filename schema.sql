@@ -248,14 +248,23 @@ VALUES(31, '31', 'Ugur Can Altun', 'worker adresi', 1903, 'pharmaceuticalwarehou
 INSERT INTO User(TCK, password, fullname, address, birth_year, role)
 VALUES(0, '0', 'admin', 'admin', 1905, 'admin');
 
+INSERT INTO User(TCK, password, fullname, address, birth_year, role)
+VALUES(12, '12', 'Ahmet Onur Uysal', 'Universiteler Mahallesi, No: 26, Cankaya/Ankara', 1985, 'pharmacist');
+
+INSERT INTO User(TCK, password, fullname, address, birth_year, role)
+VALUES(5, '5', 'Ahmet Torun', 'Bilkent University Cankaya/Ankara', 2001, 'doctor');
+
 INSERT INTO Admin(admin_id)
 VALUES(0);
 
 INSERT INTO Hospital(hospital_id, name, city)
-VALUES(1, 'Bilkent Sehir Hastanesi', 'Adana');
+VALUES(1, 'Bilkent Sehir Hastanesi', 'Ankara');
 
 INSERT INTO Doctor(TCK, expertise_field, hospital_id)
 VALUES(1, 'Urology', 1);
+
+INSERT INTO Doctor(TCK, expertise_field, hospital_id)
+VALUES(5, 'Gastroentrology', 1);
 
 INSERT INTO Patient(TCK)
 VALUES(2);
@@ -270,10 +279,19 @@ INSERT INTO BankAccount(bank_account_no, bank_account_password, active, balance,
 VALUES(1, 'banka password', 'active', 1000, 2);
 
 INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
-VALUES(1, 'Faruk Eczanesi', 'Istanbul');
+VALUES(1, 'Faruk Eczanesi', 'Ankara');
+
+INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
+VALUES(2, 'Gultekin Eczanesi', 'Ankara');
+
+INSERT INTO Pharmacy(pharmacy_id, pharm_name, pharm_city)
+VALUES(3, 'Uysal Eczanesi', 'Ankara');
 
 INSERT INTO Pharmacist(TCK, pharmacy_id)
 VALUES(11, 1);
+
+INSERT INTO Pharmacist(TCK, pharmacy_id)
+VALUES(12, 2);
 
 INSERT INTO PharmaceuticalWarehouse(warehouse_id, warehouse_name, warehouse_city)
 VALUES(1, 'Bizim Depo', 'Ankara');
@@ -290,23 +308,62 @@ VALUES(1, "Paxera");
 INSERT INTO Prescribes(presc_id, doctor_TCK, patient_TCK)
 VALUES(1, 1, 2);
 
--- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
--- VALUES("Theraflu", 1, 10);
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Theraflu", 1, 20);
 
--- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
--- VALUES("Aferin", 1, 12);
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Aferin", 1, 20);
 
--- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
--- VALUES("Paxera", 1, 5);
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Paxera", 1, 20);
 
--- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
--- VALUES("Arveles", 1, 0);
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Arveles", 1, 20);
 
--- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
--- VALUES("Nurofen", 1, 5);
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Nurofen", 1, 20);
 
--- INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
--- VALUES("Xanax", 1, 5);
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Xanax", 1, 20);
+
+--
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Theraflu", 2, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Aferin", 2, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Paxera", 2, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Arveles", 2, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Nurofen", 2, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Xanax", 2, 0);
+
+--
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Theraflu", 3, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Aferin", 3, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Paxera", 3, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Arveles", 3, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Nurofen", 3, 0);
+
+INSERT INTO HasDrug(drug_name, pharmacy_id, drug_count)
+VALUES("Xanax", 3, 0);
 
 INSERT INTO Restocks( pharm_id, warehouse_id , drug_name, restock_count, restock_date)
 VALUES (1, 1, "Paxera", 25, '2023-01-01 14:15:00');

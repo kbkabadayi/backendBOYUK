@@ -42,5 +42,5 @@ def pampito():
     connection = get_connection()
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
     
-    cursor.execute("SELECT * FROM Prescription NATURAL JOIN Prescribes NATURAL JOIN Contains WHERE doctor_TCK = %s ", (doctor_TCK,))
+    cursor.execute("SELECT * FROM Prescription NATURAL JOIN Prescribes NATURAL JOIN Contains JOIN User ON patient_TCK = TCK WHERE doctor_TCK = %s ", (doctor_TCK,))
     return jsonify(cursor.fetchall())
